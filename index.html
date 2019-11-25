@@ -1,22 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>iQuit</title>
-
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,600,700|Sarabun:400,700&display=swap" rel="stylesheet">
     <!-- Vendor CSS -->
     <link rel="stylesheet" href="./css/vendor/bootstrap.min.css">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/0a5fe748b4.js" crossorigin="anonymous"></script>
+    <!-- Page Style -->
+    <link rel="stylesheet" href="./css/style.css">
 
 </head>
+
 <body>
 
-    
+    <nav class="navbar navbar-expand-lg navbar-light bg-white navbar__main">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="img/logo.png" height="30" class="d-inline-block align-top" alt="">
+                You Smoke I Quit
+            </a>
 
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav pl-5">
+                    <a class="nav-item nav-link active" href="#">Dashboard <span class="sr-only">(current)</span></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="mb-0">Hello,</h4>
+                <h6 class="mb-0">Bright</h6>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="search__container">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>  
+                <div id="custom-templates">
+                    <input type="text" class="form-control typeahead" id="inlineFormInputGroup" placeholder="Search...">
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-    <!-- Vendor JS -->
-    <script src="./js/vendor/bootstrap.min.js"></script>
+<!-- Vendor JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="./js/vendor/bootstrap.min.js"></script>
+<script src="./js/vendor/typeahead.js"></script>
+
+<script>
+    // Instantiate the Bloodhound suggestion engine
+    var movies = new Bloodhound({
+        datumTokenizer: function (datum) {
+            return Bloodhound.tokenizers.whitespace(datum.value);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            url: 'http://api.themoviedb.org/3/search/movie?query=%QUERY&api_key=f22e6ce68f5e5002e71c20bcba477e7d',
+            filter: function (movies) {
+                console.log(movies);
+                // Map the remote source JSON array to a JavaScript object array
+                return $.map(movies.results, function (movie) {
+                    return {
+                        value: movie.original_title,
+                        release_date: movie.release_date
+                    };
+                });
+            }
+        },
+        limit: 10
+    });
+
+    // Initialize the Bloodhound suggestion engine
+    movies.initialize();
+
+    // Instantiate the Typeahead UI
+    $('#custom-templates .typeahead').typeahead(null, {
+        displayKey: 'value',
+        source: movies.ttAdapter(),
+        templates: {
+            suggestion: function(data) {
+                console.log(data);
+                return '<p><strong>' + data.value + '</strong> – ' + data.year + '</p>';
+            },
+            // suggestion: Handlebars.compile(
+            //     "<p style='padding:6px'><b>{{value}}</b> - Release date {{release_date}} </p>"),
+            footer: function(data) { 
+                console.log(data, ' footer');
+                return ('Searched for ' + "'" + data.query + "'")
+            }
+        }
+    });
+
+</script>
+
+
 </html>

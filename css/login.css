@@ -3,7 +3,7 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    font-family: 'Montserrat','Sarabun', sans-serif;
+    font-family: 'Muli','Sarabun', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
