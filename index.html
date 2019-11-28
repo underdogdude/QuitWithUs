@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>iQuit</title>
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+
+    <title>เราเลิกได้</title>
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Muli:400,600,700|Sarabun:400,700&display=swap" rel="stylesheet">
     <!-- Vendor CSS -->
@@ -21,9 +23,10 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white navbar__main">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="img/logo.png" height="30" class="d-inline-block align-top" alt="">
-                You Smoke I Quit
+            <a class="navbar-brand py-0 d-flex align-items-center" href="#">
+                <img src="img/logo-circle.png" height="50" class="d-inline-block align-top" alt="">
+                <span class="brand-text">เราเลิกได้</span>
+                <span class="brand-subtext">| Quit with us</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -50,64 +53,165 @@
                     <div class="input-group-text">
                         <i class="fas fa-search"></i>
                     </div>
-                </div>  
+                </div>
                 <div id="custom-templates">
-                    <input type="text" class="form-control typeahead" id="inlineFormInputGroup" placeholder="Search...">
+                    <input type="text" class="form-control typeahead" id="inlineFormInputGroup"
+                        placeholder="Search by name or username...">
+                    <i class="Typeahead-spinner fas fa-circle-notch fa-spin"></i>
                 </div>
             </div>
         </div>
+
+
+        <!-- Detail Main -->
+        <div class="row detail__main" id="detail_main">
+            <!-- <div class="col-md-2">
+                <div class="card id">
+                    <h2 class="card__text">
+                        1
+                    </h2>
+                    <span class="card__subtext">ID</span>
+                    <i class="card__icon fas fa-id-card-alt"></i>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card name">
+                    <h2 class="card__text">
+                        brightbright
+                    </h2>
+                    <span class="card__subtext">@testtest</span>
+                    <i class="card__icon fas fa-user"></i>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card yearsold">
+                    <h2 class="card__text">
+                        23
+                    </h2>
+                    <span class="card__subtext">Years Old</span>
+                    <i class="card__icon fas fa-birthday-cake"></i>
+                </div>
+            </div>
+            <div class="col-md-3">
+
+                <div class="card gender female">
+                    <h2 class="card__text">
+                        Female
+                    </h2>
+                    <span class="card__subtext">Gender</span>
+                    <i class="card__icon fas fa-venus"></i>
+                </div>
+
+                 <div class="card gender male">
+                    <h2 class="card__text">
+                        Male
+                    </h2>
+                    <span class="card__subtext">Gender</span>
+                    <i class="card__icon fas fa-mars"></i>
+                </div> 
+
+            </div> -->
+        </div>
+
+        <!-- Detail -->
+        <div class="row detail my-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-title">
+                        <h3>
+                            <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
+                        </h3>
+                        <hr />
+                    </div>
+
+                    <div class="card-content">
+                        <ul class="list-group list-group-flush detail__list">
+                            <li class="list-group-item">
+                                <b>เริ่มสูบบุหรี่</b> : 10/0/2019
+                            </li>
+                            <li class="list-group-item">
+                                <b>เหตุผล</b> : ม่ายมีเหตุผล
+                            </li>
+                            <li class="list-group-item">
+                                <b>Often Smoke</b> : 2
+                            </li>
+                            <li class="list-group-item">
+                                <b>When Start</b> : หลังตื่นนอนหนึ่งชม.
+                            </li>
+                            <li class="list-group-item">
+                                <b>After Eating</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Party</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Drink</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Count Smoke</b> : 10
+                            </li>
+                            <li class="list-group-item">
+                                <b>Cost</b> : 1000
+                            </li>
+                            <li class="list-group-item">
+                                <b>Other</b> : -
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-title">
+                        <h3>
+                            <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
+                        </h3>
+                        <hr />
+                    </div>
+
+                    <div class="card-content">
+                        <ul class="list-group list-group-flush detail__list">
+                            <li class="list-group-item">
+                                <b>Disease</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Allergy</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Asthma</b> : 2
+                            </li>
+                            <li class="list-group-item">
+                                <b>Blood Pressure</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Depress</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Diabetes</b> : 0
+                            </li>
+                            <li class="list-group-item">
+                                <b>Dyslipidemia</b> : 10
+                            </li>
+                          
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="mt-5 my-3">
+            <small class="text-secondary">2019 © </small>
+        </footer>
     </div>
 </body>
 <!-- Vendor JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="./js/vendor/bootstrap.min.js"></script>
 <script src="./js/vendor/typeahead.js"></script>
-
-<script>
-    // Instantiate the Bloodhound suggestion engine
-    var movies = new Bloodhound({
-        datumTokenizer: function (datum) {
-            return Bloodhound.tokenizers.whitespace(datum.value);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: {
-            url: 'http://api.themoviedb.org/3/search/movie?query=%QUERY&api_key=f22e6ce68f5e5002e71c20bcba477e7d',
-            filter: function (movies) {
-                console.log(movies);
-                // Map the remote source JSON array to a JavaScript object array
-                return $.map(movies.results, function (movie) {
-                    return {
-                        value: movie.original_title,
-                        release_date: movie.release_date
-                    };
-                });
-            }
-        },
-        limit: 10
-    });
-
-    // Initialize the Bloodhound suggestion engine
-    movies.initialize();
-
-    // Instantiate the Typeahead UI
-    $('#custom-templates .typeahead').typeahead(null, {
-        displayKey: 'value',
-        source: movies.ttAdapter(),
-        templates: {
-            suggestion: function(data) {
-                console.log(data);
-                return '<p><strong>' + data.value + '</strong> – ' + data.year + '</p>';
-            },
-            // suggestion: Handlebars.compile(
-            //     "<p style='padding:6px'><b>{{value}}</b> - Release date {{release_date}} </p>"),
-            footer: function(data) { 
-                console.log(data, ' footer');
-                return ('Searched for ' + "'" + data.query + "'")
-            }
-        }
-    });
-
-</script>
-
+<script src="./js/script.js"></script>
 
 </html>
