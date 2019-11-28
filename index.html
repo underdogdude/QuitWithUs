@@ -17,6 +17,13 @@
     <!-- Page Style -->
     <link rel="stylesheet" href="./css/style.css">
 
+    <script>
+            // First Check Login 
+            var hasLogin =  sessionStorage.getItem("quitWithUsLogin");
+            if(hasLogin === null)  {
+                window.location.replace("./login.html");
+            }
+        </script>
 </head>
 
 <body>
