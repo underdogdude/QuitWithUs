@@ -226,3 +226,29 @@ footer{
     width: 100%;
     padding-left: 30px;
 }
+
+.card.date .card__subtext{
+    color: #6a676f;
+}
+
+.card.date .card__icon { 
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #83b8c9;
+}
+
+.btn__export { 
+    border-radius: 30px;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.09);
+    color: #03723a;
+    background: #fff;
+    margin-left: 1em;
+    transition: all .3s ease;
+}
+
+.btn__export:hover { 
+    color: #03723a;
+    text-decoration: none;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+}

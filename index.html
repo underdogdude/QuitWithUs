@@ -18,12 +18,12 @@
     <link rel="stylesheet" href="./css/style.css">
 
     <script>
-            // First Check Login 
-            var hasLogin =  sessionStorage.getItem("quitWithUsLogin");
-            if(hasLogin === null)  {
-                window.location.replace("./login.html");
-            }
-        </script>
+        // First Check Login 
+        var hasLogin = sessionStorage.getItem("quitWithUsLogin");
+        if (hasLogin === null) {
+            window.location.replace("./login.html");
+        }
+    </script>
 </head>
 
 <body>
@@ -69,13 +69,21 @@
             </div>
         </div>
 
+        <!-- Last Modify and Export -->
 
+        <div class="text-right" id="last_modify">
+            
+        </div>
         <!-- Detail Main -->
-        <div class="row detail__main" id="detail_main">
+        <div class="row detail__main mb-4" id="detail_main">
+        </div>
+
+        <!-- Detail Date -->
+        <div class="row detail__date" id="detail_date">
         </div>
 
         <!-- Detail -->
-        <div class="row detail my-4"  id="detail">
+        <div class="row detail my-4" id="detail">
         </div>
 
 
@@ -86,6 +94,7 @@
 </body>
 <!-- Vendor JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="./js/vendor/bootstrap.min.js"></script>
 <script src="./js/vendor/typeahead.js"></script>
 <script src="./js/script.js"></script>

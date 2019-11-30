@@ -11,28 +11,7 @@ var users = new Bloodhound({
             // Map the remote source JSON array to a JavaScript object array
             return $.map(items, function(item) {
                 return {
-                    id: item.ID,
-                    name: item.name,
-                    username: item.username,
-                    reason: item.reason,
-                    gender: item.gender,
-                    yearsold: item.yearsold,
-                    disease: item.disease,
-                    allergy: item.allergy,
-                    bloodpressure: item.bloodpressure,
-                    diabetes: item.diabetes,
-                    depress: item.depress,
-                    dyslipidemia: item.dyslipidemia,
-                    asthma: item.asthma,
-                    otherds: item.otherds,
-                    startsmoke: item.startsmoke,
-                    countsmoke: item.countsmoke,
-                    cost: item.cost,
-                    whenstart: item.whenstart,
-                    offensmoke: item.offensmoke,
-                    aftereating: item.aftereating,
-                    drink: item.drink,
-                    party: item.party
+                    item
                 };
             });
         }
@@ -52,9 +31,9 @@ $("#custom-templates .typeahead")
             suggestion: function(data) {
                 return (
                     "<p><strong>" +
-                    data.name +
+                    data.item.name +
                     "</strong> – " +
-                    data.username +
+                    data.item.username +
                     "</p>"
                 );
             },
@@ -84,13 +63,13 @@ $("#custom-templates .typeahead")
     })
     .on("typeahead:selected", function(obj, datum) {
         //datum will be the object that is selected
-        console.log(datum);
-        showMainDetail(datum);
-        showDetail(datum);
+        console.log(datum.item);
+        showMainDetail(datum.item);
+        showDetail(datum.item);
+        showDateDetail(datum.item);
     });
 
 function showMainDetail(data) {
-    
     var elems = $("#detail_main");
         $(elems).empty();
 
@@ -122,7 +101,7 @@ function showMainDetail(data) {
         <div class="col-md-2">
             <div class="card id">
                 <h2 class="card__text">
-                    ${ data.id }
+                    ${ data.ID }
                 </h2>
                 <span class="card__subtext">ID</span>
                 <i class="card__icon fas fa-id-card-alt"></i>
@@ -166,52 +145,6 @@ function showDetail(data) {
 
     var string = `
     
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-title">
-                    <h3>
-                        <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
-                    </h3>
-                    <hr />
-                </div>
-
-                <div class="card-content">
-                    <ul class="list-group list-group-flush detail__list">
-                        <li class="list-group-item">
-                            <b>เริ่มสูบบุหรี่ครั้งแรกเมื่ออายุ</b> : ${ data.startsmoke }
-                        </li>
-                        <li class="list-group-item">
-                            <b>เหตุผล</b> : ${ data.reason }
-                        </li>
-                        <li class="list-group-item">
-                            <b>Often Smoke</b> : ${ data.offensmoke }
-                        </li>
-                        <li class="list-group-item">
-                            <b>When Start</b> : ${ data.whenstart }
-                        </li>
-                        <li class="list-group-item">
-                            <b>After Eating</b> : ${ data.aftereating }
-                        </li>
-                        <li class="list-group-item">
-                            <b>Party</b> : ${ data.party }
-                        </li>
-                        <li class="list-group-item">
-                            <b>Drink</b> : ${data.drink}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Count Smoke</b> : ${data.countsmoke}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Cost</b> : ${data.cost}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Other</b> : ${ data.otherds || "-"}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <div class="col-md-4">
             <div class="card">
                 <div class="card-title">
@@ -248,10 +181,145 @@ function showDetail(data) {
                 </div>
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-title">
+                    <h3>
+                        <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
+                    </h3>
+                    <hr />
+                </div>
+
+                <div class="card-content">
+                    <ul class="list-group list-group-flush detail__list">
+                        <li class="list-group-item">
+                            <b>เริ่มสูบบุหรี่ครั้งแรกเมื่ออายุ</b> : ${ data.startsmoke }
+                        </li>
+                        <li class="list-group-item">
+                            <b>เหตุผล</b> : ${ data.reason }
+                        </li>
+                        <li class="list-group-item">
+                            <b>Often Smoke</b> : ${ data.offensmoke }
+                        </li>
+                        <li class="list-group-item">
+                            <b>When Start</b> : ${ data.whenstart }
+                        </li>
+                        <li class="list-group-item">
+                            <b>After Eating</b> : ${ data.aftereating }
+                        </li>
+                        <li class="list-group-item">
+                            <b>Party</b> : ${ data.party }
+                        </li>
+                        <li class="list-group-item">
+                            <b>Drink</b> : ${data.drink}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Free Times</b> : ${data.freetime}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Concentration</b> : ${data.concentration}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Stress</b> : ${data.stress}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Wake Up</b> : ${data.wakeup}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Tired</b> : ${data.tired}
+                        </li>
+                        <li class="list-group-item">
+                            <b>When Depress</b> : ${data.whendepress}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Count Smoke</b> : ${data.countsmoke}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Cost</b> : ${data.cost}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Other</b> : ${ data.otherds || "-"}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     `; 
     $(elems).append(string);
+
+    $("#last_modify").append(`
+        <small>
+            <i class="text-secondary" id="last_modify">
+                Last Modified : ${ timestampToDate(data.timestamp) } 
+            </i>
+            <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
+                <i class="far fa-file-excel"></i>
+            </button>
+        </small>
+    `)
     $('html, body').animate({
         scrollTop: $("#detail_main").offset().top
     }, 500);
+    $('[data-toggle="tooltip"]').tooltip()
 
+}
+
+
+function showDateDetail (data) {
+
+    var elems = $("#detail_date");
+        $(elems).empty();
+
+    var string = `
+        <div class="col-md-4">
+            <div class="card date">
+                <h2 class="card__text">
+                    ${ data.demandquit }
+                </h2>
+                <span class="card__subtext">ระดับความต้องการเลิกบุหรี่</span>
+                <i class="card__icon fas fa-smoking-ban"></i>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card date">
+                <h2 class="card__text">
+                    ${ timestampToDate(data.startquitsmoke) }
+                </h2>
+                <span class="card__subtext">Start Quit Smoke</span>
+                <i class="card__icon far fa-calendar-alt"></i>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card date">
+                <h2 class="card__text">
+                    ${ timestampToDate(data.endquitsmoke) }
+                </h2>
+                <span class="card__subtext">End Quit Smoke</span>
+                <i class="card__icon fas fa-calendar-alt"></i>
+            </div>
+        </div>
+    `;
+    $(elems).append(string);
+    timestampToDate(data.endquitsmoke);
+}
+
+
+function timestampToDate(unix_timestamp) { 
+    
+    if(unix_timestamp === 0) { 
+        return '-';
+    }
+    var a = new Date(unix_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var fullDate = date + ' ' + month + ' ' + year ;
+    return fullDate;
+}
+
+
+
+function exportExcel() { 
+    alert('export excel currently in on instructure. Hang in there');
 }
