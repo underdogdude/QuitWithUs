@@ -81,7 +81,7 @@ function showMainDetail(data) {
                     <h2 class="card__text">
                         Male
                     </h2>
-                    <span class="card__subtext">Gender</span>
+                    <span class="card__subtext">เพศ</span>
                     <i class="card__icon fas fa-mars"></i>
                 </div> `;
     }else { 
@@ -91,7 +91,7 @@ function showMainDetail(data) {
                 <h2 class="card__text">
                     Female
                 </h2>
-                <span class="card__subtext">Gender</span>
+                <span class="card__subtext">เพศ</span>
                 <i class="card__icon fas fa-venus"></i>
             </div>
         `;
@@ -122,7 +122,7 @@ function showMainDetail(data) {
                 <h2 class="card__text">
                     ${ data.yearsold }
                 </h2>
-                <span class="card__subtext">Years Old</span>
+                <span class="card__subtext">อายุ (ปี)</span>
                 <i class="card__icon fas fa-birthday-cake"></i>
             </div>
         </div>
@@ -193,17 +193,26 @@ function showDetail(data) {
                 <div class="card-content">
                     <ul class="list-group list-group-flush detail__list">
                         <li class="list-group-item">
-                            <b>เริ่มสูบบุหรี่ครั้งแรกเมื่ออายุ</b> : ${ data.startsmoke }
+                            <b>อายุที่เริ่มสูบบุหรี่ (ปี)</b> : ${ data.startsmoke }
                         </li>
+                        <li class="list-group-item">
+                            <b>จำนวนบุหรี่ที่สูบต่อวัน (มวน)</b> : ${data.countsmoke}
+                        </li>
+                        <li class="list-group-item">
+                            <b>ราคาบุหรี่ที่สูบต่อมวน (บาท)</b> : ${data.cost}
+                        </li>
+                        <li class="list-group-item">
+                            <b>เวลาที่สูบบหุรี่มวนแรก(ตัวเลือก4ข้อ)</b> : ${ data.whenstart }
+                        </li>
+                        
+                        
                         <li class="list-group-item">
                             <b>เหตุผล</b> : ${ data.reason }
                         </li>
                         <li class="list-group-item">
                             <b>Often Smoke</b> : ${ data.offensmoke }
                         </li>
-                        <li class="list-group-item">
-                            <b>When Start</b> : ${ data.whenstart }
-                        </li>
+                       
                         <li class="list-group-item">
                             <b>After Eating</b> : ${ data.aftereating }
                         </li>
@@ -231,12 +240,7 @@ function showDetail(data) {
                         <li class="list-group-item">
                             <b>When Depress</b> : ${data.whendepress}
                         </li>
-                        <li class="list-group-item">
-                            <b>Count Smoke</b> : ${data.countsmoke}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Cost</b> : ${data.cost}
-                        </li>
+                       
                         <li class="list-group-item">
                             <b>Other</b> : ${ data.otherds || "-"}
                         </li>
@@ -246,7 +250,7 @@ function showDetail(data) {
         </div>
     `; 
     $(elems).append(string);
-
+    $("#last_modify").empty();
     $("#last_modify").append(`
         <small>
             <i class="text-secondary" id="last_modify">
@@ -317,8 +321,6 @@ function timestampToDate(unix_timestamp) {
     var fullDate = date + ' ' + month + ' ' + year ;
     return fullDate;
 }
-
-
 
 function exportExcel() { 
     alert('export excel currently in on instructure. Hang in there');

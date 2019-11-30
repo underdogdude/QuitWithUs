@@ -50,7 +50,7 @@
                                 <input class="input100" type="password" name="password" placeholder="Password" required>
                                 <span class="focus-input100"></span>
                             </div>
-                            
+
                             <div class=" pt-5 container-login100-form-btn">
                                 <button class="login100-form-btn" type="submit">
                                     Sign in
@@ -66,5 +66,50 @@
 <!-- Vendor JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="./js/vendor/bootstrap.min.js"></script>
-<script src="./js/login.js"></script>
+
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDcZ1YxsaLOf5K4AZ06ZqciY4kuhIelygk",
+    authDomain: "quitwithus-7222a.firebaseapp.com",
+    databaseURL: "https://quitwithus-7222a.firebaseio.com",
+    projectId: "quitwithus-7222a",
+    storageBucket: "quitwithus-7222a.appspot.com",
+    messagingSenderId: "172399022330",
+    appId: "1:172399022330:web:1bd9d438de185f79eef943",
+    measurementId: "G-TW5VXT801J"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+  $("form").submit(function(e){
+    e.preventDefault();
+
+    var user = $("input[name=username]").val();
+    var pwd = $("input[name=password]").val();
+
+    // firebase.auth().signInWithEmailAndPassword(user, pwd).catch(function(error) {
+    //     console.log(error);
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //   });
+
+
+    sessionStorage.setItem("quitWithUsLogin", "YouFreeToGo");
+    // redirect
+    window.location.href = "./index.html";
+
+}); 
+
+
+</script>
+
 </html>
