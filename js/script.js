@@ -345,11 +345,11 @@ function calculateNicotine(level) {
 
 function analyzeSection(data) { 
 
-    var nowTimestamp = Date.now();
+    var nowTimestamp = Math.floor(Date.now() / 1000);
     var allCountSmoke = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
     ((nowTimestamp - data.timestamp)/86400)) * data.countsmoke;
 
-    var allQuitCountSmoke = ( Date.now() - data.startquitsmoke ) * data.countsmoke;
+    var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
 
 
     var stringAnalyze = ` 
@@ -365,18 +365,18 @@ function analyzeSection(data) {
                 <ul class="list-group list-group-flush detail__list">
                     <li class="list-group-item">
                         <b> สูบบุหรี่มาแล้ว(มวน) </b> : ${ 
-                            numberWithCommas( allCountSmoke )
+                            numberWithCommas( allCountSmoke.toFixed(2) )
                         }
                     </li>
                     <li class="list-group-item">
                         <b> เสียเงินให้บุหรี่(บาท) </b> : ${ 
-                            numberWithCommas( allCountSmoke * data.cost )
+                            numberWithCommas( (allCountSmoke * data.cost).toFixed(2) )
                         }
                     </li>
 
                     <li class="list-group-item">
                         <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
-                            numberWithCommas( (allCountSmoke * 7)/525600 ) + " ปี" + " " + numberWithCommas( allCountSmoke * 7 ) + " วัน" 
+                            numberWithCommas( ((allCountSmoke * 7)/525600).toFixed(2) ) + " ปี" + " " + numberWithCommas( (allCountSmoke * 7).toFixed(2) ) + " วัน" 
                         }
                     </li>
 
@@ -388,22 +388,21 @@ function analyzeSection(data) {
 
                     <li class="list-group-item">
                         <b> เลิกสูบบุหรี่ได้ (มวน) </b> : ${ 
-                            numberWithCommas(allQuitCountSmoke) + " มวน"
+                            numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน"
                         }
                     </li>
 
                     <li class="list-group-item">
                         <b> มีเงินเก็บเพิ่มขึ้น (บาท) </b> : ${ 
-                            numberWithCommas(allQuitCountSmoke * data.cost) + " บาท"
+                            numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท"
                         }
                     </li>
 
                     <li class="list-group-item">
                         <b> มีชีวิตยืนยาวขึ้น (วัน ชั่วโมง) </b> : ${ 
-                            numberWithCommas(allQuitCountSmoke * 0.1167) + " ชั่วโมง " + numberWithCommas((allQuitCountSmoke * 0.1167) / 24 ) + " วัน" 
+                            numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" 
                         }
                     </li>
-                    
                 </ul>
             </div>
         </div>`;
