@@ -347,8 +347,8 @@ function analyzeSection(data) {
 
     var nowTimestamp = Math.floor(Date.now() / 1000);
     console.log(nowTimestamp);
-    var allCountSmoke = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
-    ((nowTimestamp - data.timestamp)/86400)) * data.countsmoke;
+    var allCountSmoke = (((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
+    ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
 
     var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
     var stringAnalyze = ` 
