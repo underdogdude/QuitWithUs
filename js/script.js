@@ -346,11 +346,12 @@ function calculateNicotine(level) {
 function analyzeSection(data) { 
 
     var nowTimestamp = Math.floor(Date.now() / 1000);
-    console.log(nowTimestamp);
     var allCountSmoke = (((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
     ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
 
     var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
+    var liftShortSmoking = (allCountSmoke * 7)/525600;
+
     var stringAnalyze = ` 
         <div class="card mb-4">
             <div class="card-title">
@@ -375,7 +376,11 @@ function analyzeSection(data) {
 
                     <li class="list-group-item">
                         <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
-                            numberWithCommas( ((allCountSmoke * 7)/525600).toFixed(2) ) + " ปี" + " " + numberWithCommas( (allCountSmoke * 7).toFixed(2) ) + " วัน" 
+                            numberWithCommas( liftShortSmoking.toFixed(2) ) + 
+                                " ปี" + 
+                                " " + 
+                            numberWithCommas( (liftShortSmoking * 365).toFixed(2) ) +
+                            " วัน" 
                         }
                     </li>
 
