@@ -77,6 +77,17 @@ body {
     background-color: #83b8c9;
     color: #FFFFFF;
 }
+
+.tt-suggestion:hover{
+   cursor: pointer;
+}
+
+.tt-suggestion:hover{
+    background-color: #83b8c9;
+    color: #FFFFFF;
+ }
+ 
+
 .tt-menu.tt-open { 
     width: 95%;
     background: #fff;
