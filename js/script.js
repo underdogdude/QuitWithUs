@@ -329,7 +329,7 @@ function generateChipWhenSmoke( data ) {
 function calculateNicotine(level) { 
 
     if( level <= 10 ) { 
-        return "ปกติ";
+        return "เล็กน้อย";
     }
     else if( level >= 11 && level <= 20 ) { 
         return "น้อย";
@@ -348,7 +348,11 @@ function calculateNicotine(level) {
 
 function analyzeSection(data) { 
 
-    var allCountSmoke  = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + data.timestamp) *  data.countsmoke;
+    var nowTimestamp = Date.now();
+    console.log(nowTimestamp);
+    var allCountSmoke = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
+    ((nowTimestamp - data.timestamp)/86400)) * data.countsmoke;
+
     var stringAnalyze = ` 
         <div class="card mb-4">
             <div class="card-title">
@@ -435,6 +439,8 @@ function smokeReasonSection(data) {
     var emotion = 0;
     var nicotine = 0; 
 
+    var chart = '';
+
     for (var k in whenSmoke){
         if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
 
@@ -449,11 +455,50 @@ function smokeReasonSection(data) {
             }
         }
     }
+    // behavoir
+    if ( behavior >= 1 && emotion === 0 && nicotine === 0 ) { 
+        chart = `<img src="./img/chart/behaviorandsocial.png" alt="พฤติกรรม" width="100%" /> <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม</h6>`
+    }
+    else if( behavior >= 1 && emotion >= 1 && nicotine === 0 ) {
+        chart = `<img src="./img/chart/behaviorandemotion.png" alt="พฤติกรรม+อารมณ์" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์</h6>`
+    }
+    else if( behavior >= 1 && emotion === 0 && nicotine >= 1 ) {
+        chart = `<img src="./img/chart/behaviorandnicotine.png" alt="พฤติกรรม+สารนิโคติน" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน</h6>`
+    }
+    else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {
+        chart = `<img src="./img/chart/behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน</h6>`
+    }
+    else if( behavior === 0 && emotion >= 1 && nicotine === 0 ) {
+        chart = `<img src="./img/chart/emotionandmind.png" alt="อารมณ์" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์</h6>`
+    }
+    else if( behavior === 0 && emotion >= 1 && nicotine >= 1 ) {
+        chart = `<img src="./img/chart/emotionandnicotine.png" alt="อารมณ์+สารนิโคติน" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน</h6>`
+    }
+    else if( behavior === 0 && emotion === 0 && nicotine >= 1 ) {
+        chart = `<img src="./img/chart/nicotine.png" alt="สารนิโคติน" width="100%" />
+        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดสารนิโคติน</h6>`
+    }
+    else { 
+        chart = 'n/A';
+    }
 
-    // if ( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) { 
-    //     return `<img src="behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" />;`
-    // }
-    // else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {  { 
-    //     return ``
-    // }
+    var string = `
+        <div class="card mb-4">
+            <div class="card-title">
+                <h3>
+                    <i class="fas fa-heartbeat text__blue"></i> สูบบุหรี่เพราะ
+                </h3>
+                <hr />
+            </div>
+            <div class="card-content">
+                ${ chart }
+            </div>
+        </div>
+    `
+    return string ;
 }
