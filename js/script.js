@@ -27,7 +27,7 @@ var users = new Bloodhound({
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-        url: "https://quitsmoking-app.herokuapp.com/?q=%QUERY",
+        url: "https://quitsmoking-app.herokuapp.com/user/?q=%QUERY",
         wildcard: "%QUERY",
         filter: function(items) {
             // Map the remote source JSON array to a JavaScript object array
@@ -165,45 +165,14 @@ function showDetail(data) {
     var elems = $("#detail");
         $(elems).empty();
 
-
-    if(data.disease === 1) { 
-
-        var stringDiseaseList = '';
-        var stringLeft = '';
-        for (var k in diseaseName){
-            if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
-
-                stringDiseaseList += `
-                    <li class="list-group-item">
-                        <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
-                    </li>
-                `;
-            }
-        }
-
-        stringLeft = `
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-title">
-                        <h3>
-                            <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
-                        </h3>
-                        <hr />
-                    </div>
-
-                    <div class="card-content">
-                        <ul class="list-group list-group-flush detail__list">
-                            ${ stringDiseaseList }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
     var string = `
-    
-        ${ stringLeft }
+        <div class="col-md-4">
+
+            ${ smokeReasonSection(data) }
+            ${ analyzeSection(data) }   
+            ${ diseaseSection(data) } 
+        </div>
+
         <div class="col-md-8">
             <div class="card">
                 <div class="card-title">
@@ -336,6 +305,11 @@ function returnHas(number){
     }
 }
 
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 
 
 function generateChipWhenSmoke( data ) { 
@@ -350,4 +324,136 @@ function generateChipWhenSmoke( data ) {
         }
     }
     return chips ? chips : '-' ;
+}
+
+function calculateNicotine(level) { 
+
+    if( level <= 10 ) { 
+        return "ปกติ";
+    }
+    else if( level >= 11 && level <= 20 ) { 
+        return "น้อย";
+    }
+    else if( level >= 21 && level <= 30 ) { 
+        return "ปานกลาง";
+    }
+    else if( level >= 31 ) { 
+        return "รุนแรง";
+    } 
+    else{ 
+        return "N/a";
+    }
+}
+
+
+function analyzeSection(data) { 
+
+    var allCountSmoke  = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + data.timestamp) *  data.countsmoke;
+    var stringAnalyze = ` 
+        <div class="card mb-4">
+            <div class="card-title">
+                <h3>
+                    <i class="fas fa-diagnoses text__blue"></i> ส่วนของการแปรผล
+                </h3>
+                <hr />
+            </div>
+
+            <div class="card-content">
+                <ul class="list-group list-group-flush detail__list">
+                    <li class="list-group-item">
+                        <b> สูบบุหรี่มาแล้ว(มวน) </b> : ${ 
+                            numberWithCommas( allCountSmoke )
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <b> เสียเงินให้บุหรี่(บาท) </b> : ${ 
+                            numberWithCommas( allCountSmoke * data.cost )
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
+                            numberWithCommas( (allCountSmoke * 7)/525600 ) + "ปี" + " " + numberWithCommas( allCountSmoke * 7 ) + "วัน" 
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <b> ระดับการติดสารนิโคตินในบุหรี่ </b> : ${ 
+                            calculateNicotine(data.countsmoke)
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>`;
+    return stringAnalyze;
+}
+
+
+function diseaseSection(data) { 
+
+
+    var stringDisease = '';
+
+    if(data.disease === 1) { 
+
+        var stringDiseaseList = '';
+        for (var k in diseaseName){
+            if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
+
+                stringDiseaseList += `
+                    <li class="list-group-item">
+                        <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
+                    </li>
+                `;
+            }
+        }
+
+        stringDisease = `
+            <div class="card">
+                <div class="card-title">
+                    <h3>
+                        <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
+                    </h3>
+                    <hr />
+                </div>
+                <div class="card-content">
+                    <ul class="list-group list-group-flush detail__list">
+                        ${ stringDiseaseList }
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    return stringDisease;
+}   
+
+
+function smokeReasonSection(data) { 
+
+    var behavior = 0;
+    var emotion = 0;
+    var nicotine = 0; 
+
+    for (var k in whenSmoke){
+        if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
+
+            if( k === "aftereating" || k === "drink" || k === "party" ) { 
+                behavior += 1;
+            }
+            else if( k === "freetime" || k === "concentration" || k === "stress" ) {
+                emotion += 1;
+            }
+            else if ( k === "wakeup" || k === "tired" || k === "whendepress" ){
+                nicotine += 1;
+            }
+        }
+    }
+
+    // if ( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) { 
+    //     return `<img src="behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" />;`
+    // }
+    // else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {  { 
+    //     return ``
+    // }
 }
