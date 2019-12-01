@@ -1,3 +1,25 @@
+var diseaseName = { 
+    allergy : "โรคภูมิแพ้",
+    asthma: "โรคหอบหืด",
+    bloodpressure: "โรคความดันโลหิตสูง",
+    depress: "โรคซึมเศร้า",
+    diabetes: "โรคเบาหวาน",
+    dyslipidemia: "ไขมันในเลือดสูง",
+    otherds: "อื่นๆ"
+}
+
+var whenSmoke = { 
+    aftereating: "หลังรับประทานอาหาร",
+    drink: "ดื่มสุราหรือดื่มเครื่องดื่มแอลกอฮอล์",
+    party: "สังสรรค์เข้าสังคม",
+    freetime: "เวลาว่างที่รู้สึกสบาย ผ่อนคลาย",
+    concentration: "ต้องการใช้สมาธิ อ่านหนังสือ",
+    stress: "รู้สึกเครียด โกรธ มีความทุกข์ใจ",
+    wakeup: "ทันทีหลังจากตื่นนอนในตอนเช้า",
+    tired: "รู้สึกอ่อนเพลีย ไม่มีแรง",
+    whendepress: "ซึมเศร้า นอนไม่หลับ"
+}
+
 // Instantiate the Bloodhound suggestion engine
 var users = new Bloodhound({
     datumTokenizer: function(datum) {
@@ -143,44 +165,45 @@ function showDetail(data) {
     var elems = $("#detail");
         $(elems).empty();
 
-    var string = `
-    
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-title">
-                    <h3>
-                        <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
-                    </h3>
-                    <hr />
-                </div>
 
-                <div class="card-content">
-                    <ul class="list-group list-group-flush detail__list">
-                        <li class="list-group-item">
-                            <b>Allergy</b> : ${data.allergy}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Asthma</b> : ${data.asthma}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Blood Pressure</b> : ${data.bloodpressure}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Depress</b> : ${data.depress}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Diabetes</b> : ${data.diabetes}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Disease</b> : ${data.disease}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Dyslipidemia</b> : ${data.dyslipidemia}
-                        </li>
-                    </ul>
+    if(data.disease === 1) { 
+
+        var stringDiseaseList = '';
+        var stringLeft = '';
+        for (var k in diseaseName){
+            if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
+
+                stringDiseaseList += `
+                    <li class="list-group-item">
+                        <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
+                    </li>
+                `;
+            }
+        }
+
+        stringLeft = `
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-title">
+                        <h3>
+                            <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
+                        </h3>
+                        <hr />
+                    </div>
+
+                    <div class="card-content">
+                        <ul class="list-group list-group-flush detail__list">
+                            ${ stringDiseaseList }
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        `;
+    }
+
+    var string = `
+    
+        ${ stringLeft }
         <div class="col-md-8">
             <div class="card">
                 <div class="card-title">
@@ -202,54 +225,26 @@ function showDetail(data) {
                             <b>ราคาบุหรี่ที่สูบต่อมวน (บาท)</b> : ${data.cost}
                         </li>
                         <li class="list-group-item">
-                            <b>เวลาที่สูบบหุรี่มวนแรก(ตัวเลือก4ข้อ)</b> : ${ data.whenstart }
+                            <b>เวลาที่สูบบุหรี่มวนแรก</b> : ${ data.whenstart }
                         </li>
-                        
-                        
+                        <li class="list-group-item">
+                            <b>ปกติสูบบุหรี่ในช่วงใด</b> : ${ generateChipWhenSmoke(data) }
+                        </li>
+
                         <li class="list-group-item">
                             <b>เหตุผล</b> : ${ data.reason }
                         </li>
                         <li class="list-group-item">
                             <b>Often Smoke</b> : ${ data.offensmoke }
                         </li>
-                       
-                        <li class="list-group-item">
-                            <b>After Eating</b> : ${ data.aftereating }
-                        </li>
-                        <li class="list-group-item">
-                            <b>Party</b> : ${ data.party }
-                        </li>
-                        <li class="list-group-item">
-                            <b>Drink</b> : ${data.drink}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Free Times</b> : ${data.freetime}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Concentration</b> : ${data.concentration}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Stress</b> : ${data.stress}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Wake Up</b> : ${data.wakeup}
-                        </li>
-                        <li class="list-group-item">
-                            <b>Tired</b> : ${data.tired}
-                        </li>
-                        <li class="list-group-item">
-                            <b>When Depress</b> : ${data.whendepress}
-                        </li>
-                       
-                        <li class="list-group-item">
-                            <b>Other</b> : ${ data.otherds || "-"}
-                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     `; 
+
     $(elems).append(string);
+
     $("#last_modify").empty();
     $("#last_modify").append(`
         <small>
@@ -324,4 +319,35 @@ function timestampToDate(unix_timestamp) {
 
 function exportExcel() { 
     alert('export excel currently in on instructure. Hang in there');
+}
+
+
+function returnHas(number){ 
+    
+    if(number === 0) { 
+        
+        return 'ไม่ใช่';
+    }else if(number === 1) { 
+
+        return "ใช่";
+    }else { 
+
+        return number;
+    }
+}
+
+
+
+function generateChipWhenSmoke( data ) { 
+
+    var chips = ``;
+    for (var k in whenSmoke){
+        if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
+            
+            chips += `
+                <span class="badge badge-info"> ${ whenSmoke[k] } </span> 
+            `;
+        }
+    }
+    return chips ? chips : '-' ;
 }
