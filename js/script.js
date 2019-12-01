@@ -170,11 +170,10 @@ function showDetail(data) {
 
             ${ smokeReasonSection(data) }
             ${ analyzeSection(data) }   
-            ${ diseaseSection(data) } 
         </div>
 
         <div class="col-md-8">
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-title">
                     <h3>
                         <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
@@ -209,6 +208,7 @@ function showDetail(data) {
                     </ul>
                 </div>
             </div>
+            ${ diseaseSection(data) } 
         </div>
     `; 
 
