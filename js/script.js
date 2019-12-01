@@ -202,9 +202,6 @@ function showDetail(data) {
                         <li class="list-group-item">
                             <b>เหตุผล</b> : ${ data.reason }
                         </li>
-                        <li class="list-group-item">
-                            <b>Often Smoke</b> : ${ data.offensmoke }
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -349,9 +346,11 @@ function calculateNicotine(level) {
 function analyzeSection(data) { 
 
     var nowTimestamp = Date.now();
-    console.log(nowTimestamp);
     var allCountSmoke = ((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
     ((nowTimestamp - data.timestamp)/86400)) * data.countsmoke;
+
+    var allQuitCountSmoke = ( Date.now() - data.startquitsmoke ) * data.countsmoke;
+
 
     var stringAnalyze = ` 
         <div class="card mb-4">
@@ -377,7 +376,7 @@ function analyzeSection(data) {
 
                     <li class="list-group-item">
                         <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
-                            numberWithCommas( (allCountSmoke * 7)/525600 ) + "ปี" + " " + numberWithCommas( allCountSmoke * 7 ) + "วัน" 
+                            numberWithCommas( (allCountSmoke * 7)/525600 ) + " ปี" + " " + numberWithCommas( allCountSmoke * 7 ) + " วัน" 
                         }
                     </li>
 
@@ -386,6 +385,25 @@ function analyzeSection(data) {
                             calculateNicotine(data.countsmoke)
                         }
                     </li>
+
+                    <li class="list-group-item">
+                        <b> เลิกสูบบุหรี่ได้ (มวน) </b> : ${ 
+                            numberWithCommas(allQuitCountSmoke) + " มวน"
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <b> มีเงินเก็บเพิ่มขึ้น (บาท) </b> : ${ 
+                            numberWithCommas(allQuitCountSmoke * data.cost) + " บาท"
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <b> มีชีวิตยืนยาวขึ้น (วัน ชั่วโมง) </b> : ${ 
+                            numberWithCommas(allQuitCountSmoke * 0.1167) + " ชั่วโมง " + numberWithCommas((allQuitCountSmoke * 0.1167) / 24 ) + " วัน" 
+                        }
+                    </li>
+                    
                 </ul>
             </div>
         </div>`;
@@ -491,7 +509,7 @@ function smokeReasonSection(data) {
         <div class="card mb-4">
             <div class="card-title">
                 <h3>
-                    <i class="fas fa-heartbeat text__blue"></i> สูบบุหรี่เพราะ
+                    <i class="fas fa-smoking text__blue"></i> สูบบุหรี่เพราะ
                 </h3>
                 <hr />
             </div>
