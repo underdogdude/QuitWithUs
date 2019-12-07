@@ -84,11 +84,16 @@ $("#custom-templates .typeahead")
         $(".Typeahead-spinner").hide();
     })
     .on("typeahead:selected", function(obj, datum) {
-        //datum will be the object that is selected
+
         console.log(datum.item);
         showMainDetail(datum.item);
-        showDetail(datum.item);
         showDateDetail(datum.item);
+        render.smokeReasonSection(datum.item);
+        render.analyzeSection(datum.item);
+        render.behaviorSection(datum.item);
+        render.diseaseSection(datum.item);
+        
+        render.init(datum.item);
     });
 
 function showMainDetail(data) {
@@ -158,78 +163,6 @@ function showMainDetail(data) {
     $(elems).append(string);
 }
 
-
-function showDetail(data) {
-
-
-    var elems = $("#detail");
-        $(elems).empty();
-
-    var string = `
-        <div class="col-md-4">
-
-            ${ smokeReasonSection(data) }
-            ${ analyzeSection(data) }   
-        </div>
-
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-title">
-                    <h3>
-                        <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
-                    </h3>
-                    <hr />
-                </div>
-
-                <div class="card-content">
-                    <ul class="list-group list-group-flush detail__list">
-                        <li class="list-group-item">
-                            <b>อายุที่เริ่มสูบบุหรี่ (ปี)</b> : ${ data.startsmoke }
-                        </li>
-                        <li class="list-group-item">
-                            <b>จำนวนบุหรี่ที่สูบต่อวัน (มวน)</b> : ${data.countsmoke}
-                        </li>
-                        <li class="list-group-item">
-                            <b>ราคาบุหรี่ที่สูบต่อมวน (บาท)</b> : ${data.cost}
-                        </li>
-                        <li class="list-group-item">
-                            <b>เวลาที่สูบบุหรี่มวนแรก</b> : ${ data.whenstart }
-                        </li>
-                        <li class="list-group-item">
-                            <b>ปกติสูบบุหรี่ในช่วงใด</b> : ${ generateChipWhenSmoke(data) }
-                        </li>
-
-                        <li class="list-group-item">
-                            <b>เหตุผล</b> : ${ data.reason }
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            ${ diseaseSection(data) } 
-        </div>
-    `; 
-
-    $(elems).append(string);
-
-    $("#last_modify").empty();
-    $("#last_modify").append(`
-        <small>
-            <i class="text-secondary" id="last_modify">
-                Last Modified : ${ timestampToDate(data.timestamp) } 
-            </i>
-            <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
-                <i class="far fa-file-excel"></i>
-            </button>
-        </small>
-    `)
-    $('html, body').animate({
-        scrollTop: $("#detail_main").offset().top
-    }, 500);
-    $('[data-toggle="tooltip"]').tooltip()
-
-}
-
-
 function showDateDetail (data) {
 
     var elems = $("#detail_date");
@@ -268,7 +201,6 @@ function showDateDetail (data) {
     timestampToDate(data.endquitsmoke);
 }
 
-
 function timestampToDate(unix_timestamp) { 
     
     if(unix_timestamp === 0) { 
@@ -286,7 +218,6 @@ function timestampToDate(unix_timestamp) {
 function exportExcel() { 
     alert('export excel currently in on instructure. Hang in there');
 }
-
 
 function returnHas(number){ 
     
@@ -307,7 +238,6 @@ function numberWithCommas(x) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
-
 
 function generateChipWhenSmoke( data ) { 
 
@@ -342,184 +272,256 @@ function calculateNicotine(level) {
     }
 }
 
+function drugSection(data) { 
 
-function analyzeSection(data) { 
-
-    var nowTimestamp = Math.floor(Date.now() / 1000);
-    var allCountSmoke = (((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
-    ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
-
-    var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
-    var liftShortSmoking = (allCountSmoke * 7)/525600;
-
-    var stringAnalyze = ` 
-        <div class="card mb-4">
-            <div class="card-title">
-                <h3>
-                    <i class="fas fa-diagnoses text__blue"></i> ส่วนของการแปรผล
-                </h3>
-                <hr />
-            </div>
-
-            <div class="card-content">
-                <ul class="list-group list-group-flush detail__list">
-                    <li class="list-group-item">
-                        <b> สูบบุหรี่มาแล้ว(มวน) </b> : ${ 
-                            numberWithCommas( allCountSmoke.toFixed(2) )
-                        }
-                    </li>
-                    <li class="list-group-item">
-                        <b> เสียเงินให้บุหรี่(บาท) </b> : ${ 
-                            numberWithCommas( (allCountSmoke * data.cost).toFixed(2) )
-                        }
-                    </li>
-
-                    <li class="list-group-item">
-                        <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
-                            numberWithCommas( liftShortSmoking.toFixed(2) ) + 
-                                " ปี" + 
-                                " " + 
-                            numberWithCommas( (liftShortSmoking * 365).toFixed(2) ) +
-                            " วัน" 
-                        }
-                    </li>
-
-                    <li class="list-group-item">
-                        <b> ระดับการติดสารนิโคตินในบุหรี่ </b> : ${ 
-                            calculateNicotine(data.countsmoke)
-                        }
-                    </li>
-
-                    <li class="list-group-item">
-                        <b> เลิกสูบบุหรี่ได้ (มวน) </b> : ${ 
-                            numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน"
-                        }
-                    </li>
-
-                    <li class="list-group-item">
-                        <b> มีเงินเก็บเพิ่มขึ้น (บาท) </b> : ${ 
-                            numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท"
-                        }
-                    </li>
-
-                    <li class="list-group-item">
-                        <b> มีชีวิตยืนยาวขึ้น (วัน ชั่วโมง) </b> : ${ 
-                            numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" 
-                        }
-                    </li>
-                </ul>
-            </div>
-        </div>`;
-    return stringAnalyze;
+    var string = get.drug();
+    console.log(string, 'string');
+    callback();
 }
 
 
-function diseaseSection(data) { 
+var render = {
 
+    init: function(data) { 
 
-    var stringDisease = '';
+        $("#last_modify").empty();
+        $("#last_modify").append(`
+            <small>
+                <i class="text-secondary" id="last_modify">
+                    Last Modified : ${ timestampToDate(data.timestamp) } 
+                </i>
+                <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
+                    <i class="far fa-file-excel"></i>
+                </button>
+            </small>
+        `)
+        $('html, body').animate({
+            scrollTop: $("#detail_main").offset().top
+        }, 500);
+        $('[data-toggle="tooltip"]').tooltip()
+    },      
+    smokeReasonSection: function(data) { 
 
-    if(data.disease === 1) { 
+        render.remove("#smoke_reason");
 
-        var stringDiseaseList = '';
-        for (var k in diseaseName){
-            if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
+        var behavior = 0;
+        var emotion = 0;
+        var nicotine = 0; 
+        var chart = '';
 
-                stringDiseaseList += `
-                    <li class="list-group-item">
-                        <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
-                    </li>
-                `;
+        for (var k in whenSmoke){
+            if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
+
+                if( k === "aftereating" || k === "drink" || k === "party" ) { 
+                    behavior += 1;
+                }
+                else if( k === "freetime" || k === "concentration" || k === "stress" ) {
+                    emotion += 1;
+                }
+                else if ( k === "wakeup" || k === "tired" || k === "whendepress" ){
+                    nicotine += 1;
+                }
             }
         }
+        // behavoir
+        if ( behavior >= 1 && emotion === 0 && nicotine === 0 ) { 
+            chart = `<img src="./img/chart/behaviorandsocial.png" alt="พฤติกรรม" width="100%" /> <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม</h6>`
+        }
+        else if( behavior >= 1 && emotion >= 1 && nicotine === 0 ) {
+            chart = `<img src="./img/chart/behaviorandemotion.png" alt="พฤติกรรม+อารมณ์" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์</h6>`
+        }
+        else if( behavior >= 1 && emotion === 0 && nicotine >= 1 ) {
+            chart = `<img src="./img/chart/behaviorandnicotine.png" alt="พฤติกรรม+สารนิโคติน" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน</h6>`
+        }
+        else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {
+            chart = `<img src="./img/chart/behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน</h6>`
+        }
+        else if( behavior === 0 && emotion >= 1 && nicotine === 0 ) {
+            chart = `<img src="./img/chart/emotionandmind.png" alt="อารมณ์" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์</h6>`
+        }
+        else if( behavior === 0 && emotion >= 1 && nicotine >= 1 ) {
+            chart = `<img src="./img/chart/emotionandnicotine.png" alt="อารมณ์+สารนิโคติน" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน</h6>`
+        }
+        else if( behavior === 0 && emotion === 0 && nicotine >= 1 ) {
+            chart = `<img src="./img/chart/nicotine.png" alt="สารนิโคติน" width="100%" />
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดสารนิโคติน</h6>`
+        }
+        else { 
+            chart = 'n/A';
+        }
 
-        stringDisease = `
-            <div class="card">
+        var string = `
+            <div class="card mb-4">
                 <div class="card-title">
                     <h3>
-                        <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
+                        <i class="fas fa-smoking text__blue"></i> สูบบุหรี่เพราะ
                     </h3>
                     <hr />
                 </div>
                 <div class="card-content">
+                    ${ chart }
+                </div>
+            </div>
+        `;
+
+        $("#smoke_reason").append(string);
+    },
+    analyzeSection: function(data) {
+
+        render.remove("#analyze");
+
+        var nowTimestamp = Math.floor(Date.now() / 1000);
+        var allCountSmoke = (((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
+        ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
+        var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
+        var liftShortSmoking = (allCountSmoke * 7)/525600;
+    
+        var stringAnalyze = ` 
+            <div class="card mb-4">
+                <div class="card-title">
+                    <h3>
+                        <i class="fas fa-diagnoses text__blue"></i> ส่วนของการแปรผล
+                    </h3>
+                    <hr />
+                </div>
+    
+                <div class="card-content">
                     <ul class="list-group list-group-flush detail__list">
-                        ${ stringDiseaseList }
+                        <li class="list-group-item">
+                            <b> สูบบุหรี่มาแล้ว(มวน) </b> : ${ 
+                                numberWithCommas( allCountSmoke.toFixed(2) )
+                            }
+                        </li>
+                        <li class="list-group-item">
+                            <b> เสียเงินให้บุหรี่(บาท) </b> : ${ 
+                                numberWithCommas( (allCountSmoke * data.cost).toFixed(2) )
+                            }
+                        </li>
+    
+                        <li class="list-group-item">
+                            <b> ชีวิตที่สั้นลงจากการสูบบุหรี่(ปี วัน) </b> : ${ 
+                                numberWithCommas( liftShortSmoking.toFixed(2) ) + 
+                                    " ปี" + 
+                                    " " + 
+                                numberWithCommas( (liftShortSmoking * 365).toFixed(2) ) +
+                                " วัน" 
+                            }
+                        </li>
+    
+                        <li class="list-group-item">
+                            <b> ระดับการติดสารนิโคตินในบุหรี่ </b> : ${ 
+                                calculateNicotine(data.countsmoke)
+                            }
+                        </li>
+    
+                        <li class="list-group-item">
+                            <b> เลิกสูบบุหรี่ได้ (มวน) </b> : ${ 
+                                numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน"
+                            }
+                        </li>
+    
+                        <li class="list-group-item">
+                            <b> มีเงินเก็บเพิ่มขึ้น (บาท) </b> : ${ 
+                                numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท"
+                            }
+                        </li>
+    
+                        <li class="list-group-item">
+                            <b> มีชีวิตยืนยาวขึ้น (วัน ชั่วโมง) </b> : ${ 
+                                numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" 
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>`;
+
+        $("#analyze").append(stringAnalyze);
+    },
+    behaviorSection: function(data) { 
+
+        render.remove("#behavior");
+        var string = `
+            <div class="card mb-4">
+                <div class="card-title">
+                    <h3>
+                        <i class="fas fa-clipboard-list text__blue"></i> พฤติกรรมการสูบบุหรี่
+                    </h3>
+                    <hr />
+                </div>
+
+                <div class="card-content">
+                    <ul class="list-group list-group-flush detail__list">
+                        <li class="list-group-item">
+                            <b>อายุที่เริ่มสูบบุหรี่ (ปี)</b> : ${ data.startsmoke }
+                        </li>
+                        <li class="list-group-item">
+                            <b>จำนวนบุหรี่ที่สูบต่อวัน (มวน)</b> : ${data.countsmoke}
+                        </li>
+                        <li class="list-group-item">
+                            <b>ราคาบุหรี่ที่สูบต่อมวน (บาท)</b> : ${data.cost}
+                        </li>
+                        <li class="list-group-item">
+                            <b>เวลาที่สูบบุหรี่มวนแรก</b> : ${ data.whenstart }
+                        </li>
+                        <li class="list-group-item">
+                            <b>ปกติสูบบุหรี่ในช่วงใด</b> : ${ generateChipWhenSmoke(data) }
+                        </li>
+
+                        <li class="list-group-item">
+                            <b>เหตุผล</b> : ${ data.reason }
+                        </li>
                     </ul>
                 </div>
             </div>
         `;
-    }
+        $("#behavior").append(string);
 
-    return stringDisease;
-}   
+    },
+    diseaseSection: function(data) { 
 
+        render.remove("#disease");
 
-function smokeReasonSection(data) { 
+        var stringDisease = '';
 
-    var behavior = 0;
-    var emotion = 0;
-    var nicotine = 0; 
-
-    var chart = '';
-
-    for (var k in whenSmoke){
-        if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
-
-            if( k === "aftereating" || k === "drink" || k === "party" ) { 
-                behavior += 1;
+        if(data.disease === 1) { 
+    
+            var stringDiseaseList = '';
+            for (var k in diseaseName){
+                if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
+    
+                    stringDiseaseList += `
+                        <li class="list-group-item">
+                            <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
+                        </li>
+                    `;
+                }
             }
-            else if( k === "freetime" || k === "concentration" || k === "stress" ) {
-                emotion += 1;
-            }
-            else if ( k === "wakeup" || k === "tired" || k === "whendepress" ){
-                nicotine += 1;
-            }
+
+            stringDisease = `
+                <div class="card">
+                    <div class="card-title">
+                        <h3>
+                            <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
+                        </h3>
+                        <hr />
+                    </div>
+                    <div class="card-content">
+                        <ul class="list-group list-group-flush detail__list">
+                            ${ stringDiseaseList }
+                        </ul>
+                    </div>
+                </div>
+            `;
         }
-    }
-    // behavoir
-    if ( behavior >= 1 && emotion === 0 && nicotine === 0 ) { 
-        chart = `<img src="./img/chart/behaviorandsocial.png" alt="พฤติกรรม" width="100%" /> <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม</h6>`
-    }
-    else if( behavior >= 1 && emotion >= 1 && nicotine === 0 ) {
-        chart = `<img src="./img/chart/behaviorandemotion.png" alt="พฤติกรรม+อารมณ์" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์</h6>`
-    }
-    else if( behavior >= 1 && emotion === 0 && nicotine >= 1 ) {
-        chart = `<img src="./img/chart/behaviorandnicotine.png" alt="พฤติกรรม+สารนิโคติน" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน</h6>`
-    }
-    else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {
-        chart = `<img src="./img/chart/behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน</h6>`
-    }
-    else if( behavior === 0 && emotion >= 1 && nicotine === 0 ) {
-        chart = `<img src="./img/chart/emotionandmind.png" alt="อารมณ์" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์</h6>`
-    }
-    else if( behavior === 0 && emotion >= 1 && nicotine >= 1 ) {
-        chart = `<img src="./img/chart/emotionandnicotine.png" alt="อารมณ์+สารนิโคติน" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน</h6>`
-    }
-    else if( behavior === 0 && emotion === 0 && nicotine >= 1 ) {
-        chart = `<img src="./img/chart/nicotine.png" alt="สารนิโคติน" width="100%" />
-        <h6 class="text-center mt-3">สูบบุหรี่เพราะติดสารนิโคติน</h6>`
-    }
-    else { 
-        chart = 'n/A';
-    }
+        $("#disease").append(stringDisease);
+    },
+    remove: function(elems) {
 
-    var string = `
-        <div class="card mb-4">
-            <div class="card-title">
-                <h3>
-                    <i class="fas fa-smoking text__blue"></i> สูบบุหรี่เพราะ
-                </h3>
-                <hr />
-            </div>
-            <div class="card-content">
-                ${ chart }
-            </div>
-        </div>
-    `
-    return string ;
+        $(elems).empty();
+    }
 }
