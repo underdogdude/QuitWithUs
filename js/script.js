@@ -20,6 +20,20 @@ var whenSmoke = {
     whendepress: "ซึมเศร้า นอนไม่หลับ"
 }
 
+// var emotions = { 
+//     cannotfocus: "ไม่มีสมาธิ" ,
+//     sad: "เศร้า" ,
+//     happy: "มีความสุข" ,
+//     tired: "อ่อนเพลีย" ,
+//     relax: "ผ่อนคลาย" ,
+//     dizzy: "เวียนหัว" ,
+//     fresh: "สดชื่น" ,
+//     angry: "หงุดหงิด" ,
+//     anxiety: "เครียด" ,
+//     เหม: "เครียด" ,
+
+// }
+
 // Instantiate the Bloodhound suggestion engine
 var users = new Bloodhound({
     datumTokenizer: function(datum) {
@@ -93,6 +107,7 @@ $("#custom-templates .typeahead")
         render.behaviorSection(datum.item);
         render.diseaseSection(datum.item);
         render.drugSection(datum.item);
+        render.diarySection(datum.item);
 
         render.init(datum.item);
     });
@@ -271,6 +286,60 @@ function calculateNicotine(level) {
     else{ 
         return "N/a";
     }
+}
+
+function isSmokeDetail(data) { 
+
+    var string = '';
+    if(data.smoking === 'สูบบุหรี่') { 
+        string = `
+            <p>
+                <b>จำนวนบุหรี่ที่สูบ : </b> ${data.number}
+            </p>
+            <p>
+                <b>กิจกรรมที่ทำขณะสูบ : </b> ${data.activity}
+            </p>
+            <p>
+                <b>บุคคลที่อยู่ด้วยขณะสูบบุหรี่ : </b> ${ data.people }
+            </p>
+        `;
+    }
+    return string;
+}
+
+function generateDate(date) { 
+
+    var splitDate = date.split('-');
+    var monthLists = { 
+        '01' : 'JAN',
+        '02' : 'FEB',
+        '03' : 'MAR',
+        '04' : 'APR',
+        '05' : 'MAY',
+        '06' : 'JUN',
+        '07' : 'JUL',
+        '08' : 'AUG',
+        '09' : 'SEP',
+        '10' : 'OCT',
+        '11' : 'NOV',
+        '12' : 'DEC'
+    }
+    var year = splitDate[0];
+    var month = splitDate[1];
+    var date = splitDate[2].split('T');
+        date = date[0];
+
+    return string = `
+        <small class="month">
+            ${ monthLists[month] }
+        </small>
+        <h1 class="date">
+            ${ date }
+        </h1>
+        <h3 class="year">
+            ${ year }
+        </h3>
+    `  
 }
 
 var render = {
@@ -517,7 +586,7 @@ var render = {
     drugSection: function(data) { 
         
         get.drug(data.username).done(function(res) { 
-            console.log(res);
+        
             render.remove("#drug");
 
             if(res.length !== 0) { 
@@ -570,6 +639,82 @@ var render = {
             }
         });
     },
+
+    diarySection: function (data)  {
+
+        get.diary(data.username).done(function(res) { 
+            
+            render.remove("#diary");
+            if(res.length !== 0) { 
+
+                var string = '';
+                var diaryList = '';
+
+                for (var i = 0 ; i < res.length ; i++) { 
+                    
+                    diaryList += `
+                        <li class="list-group-item d-flex">
+                            <div class="d-flex flex-column calendar justify-content-center">
+                               
+                                ${ generateDate(res[i].date) }
+                            </div>
+                            <div class="d-flex flex-column list__diary-detail w-100">
+                                <div class="d-flex justify-content-between">
+                                    <div class="is__smoke text-center">
+                                        <h4>
+                                            ${ res[i].smoking }
+                                        </h4>
+                                        <img src="./img/${ res[i].smoking }.png" alt="" width="50px;" />
+                                    </div>
+                                    <div class="is__want text-center">
+                                        <h4>
+                                            ความอยากบุหรี่
+                                        </h4>
+                                        <h1>
+                                            ${ res[i].thirst }
+                                        </h1>
+                                    </div>
+                                    <div class="emotion text-center">
+                                        <h4>
+                                            ความรู้สึกในตอนนี้
+                                        </h4>
+                                        <img src="./img/emotions/${res[i].emotion}.png" alt="" width="50px">
+                                        <br />
+                                        <small>${ res[i].emotion }</small>
+                                    </div>
+                                </div>
+                                <div class="list__diary-subtext">
+                                    ${ isSmokeDetail( res[i] ) }
+                                    <small>
+                                        <b>ข้อความ</b> : ${ res[i].additional }
+                                    </small>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                }
+                
+                string = `
+                    <div class="card mb-4">
+                        <div class="card-title">
+                            <h3>
+                                <i class="fas fa-book text__blue"></i> บันทึกประจำวัน
+                            </h3>
+                            <hr />
+                        </div>
+                        <div class="card-content">
+                            <ul class="list-group list__diary">
+                                ${ diaryList }
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                $("#diary").append(string);
+            }
+        });
+    },
+
     remove: function(elems) {
 
         $(elems).empty();

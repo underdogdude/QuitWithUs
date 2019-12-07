@@ -263,3 +263,63 @@ footer{
     text-decoration: none;
     box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
 }
+
+.list__diary .list-group-item { 
+    padding: 0;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.list__diary .calendar{  
+    text-align: center;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    min-width: 80px;
+    
+}
+.list__diary li:nth-child(odd) .calendar{  
+    background: #add3db;
+}
+.list__diary li:nth-child(even) .calendar{  
+    background: #ecb980;
+}
+
+.list__diary .calendar .month { 
+    color: #6a676f;
+}
+
+.list__diary .calendar .date { 
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.list__diary .calendar .year { 
+
+    color: #6a676f;
+    font-size: 15px;
+}
+.list__diary li:nth-child(odd) .list__diary-detail{  
+    background: #f2f9ff;
+}
+.list__diary li:nth-child(even) .list__diary-detail{  
+    background: #fbfafa;
+}
+
+.list__diary-detail { 
+    padding: 10px;
+}
+
+.list__diary-detail h4{ 
+    font-size: 15px;
+    color: #6a676f;
+}
+
+.list__diary-detail .is__want h1 { 
+    font-weight: bold;
+    color: #78add2;
+}
+.list__diary-subtext p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
