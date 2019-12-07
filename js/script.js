@@ -92,7 +92,8 @@ $("#custom-templates .typeahead")
         render.analyzeSection(datum.item);
         render.behaviorSection(datum.item);
         render.diseaseSection(datum.item);
-        
+        render.drugSection(datum.item);
+
         render.init(datum.item);
     });
 
@@ -271,14 +272,6 @@ function calculateNicotine(level) {
         return "N/a";
     }
 }
-
-function drugSection(data) { 
-
-    var string = get.drug();
-    console.log(string, 'string');
-    callback();
-}
-
 
 var render = {
 
@@ -503,7 +496,7 @@ var render = {
             }
 
             stringDisease = `
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-title">
                         <h3>
                             <i class="fas fa-heartbeat text__blue"></i> โรคประจำตัว
@@ -519,6 +512,63 @@ var render = {
             `;
         }
         $("#disease").append(stringDisease);
+
+    },
+    drugSection: function(data) { 
+        
+        get.drug(data.username).done(function(res) { 
+            console.log(res);
+            render.remove("#drug");
+
+            if(res.length !== 0) { 
+
+                var string = '';
+                var drugList = '';
+                for (var i = 0 ; i < res.length ; i++) { 
+                    
+                    drugList += `
+                        <li class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5> <strong>${ res[i].name } </strong></h5>
+                                <small> 
+                                    <span class="badge badge-pill badge-info"> ${res[i].time} </span>
+                                </small>
+                            </div>
+                            <h6> ขนาดยา : ${ res[i].size } </h6>
+                            <h6 class="mb-1"> ครั้งละ : ${ res[i].quantity } </h6>
+                            <p class="mb-1">
+                                ความถี่ในการใช้ยา : ${ res[i].frequenzy }
+                            </p>
+                            <p class="mb-1">
+                                วิธีใช้ : ${ res[i].method }
+                            </p>
+                            <small>
+                                <b>เริ่มใช้ยา : </b> ${ res[i].startdate }
+                                <b>ถึงวันที่ : </b> ${ res[i].stopdate }
+                            </small>
+                        </li>
+                    `;
+                }
+                
+                string = `
+                    <div class="card mb-4">
+                        <div class="card-title">
+                            <h3>
+                                <i class="fas fa-pills text__blue"></i> ยา
+                            </h3>
+                            <hr />
+                        </div>
+                        <div class="card-content">
+                            <ul class="list-group detail__list">
+                                ${ drugList }
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                $("#drug").append(string);
+            }
+        });
     },
     remove: function(elems) {
 

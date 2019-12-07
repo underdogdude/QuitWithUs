@@ -1,8 +1,10 @@
 var get = {
-    drug: function() {
-        $.ajax({
-            url: "https://quitsmoking-app.herokuapp.com/drug",
-            method: "GET"
-        });
+    drug: function(param) {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/drug?f=owner&q=" + param ,
+                method: "GET"
+            })
+        )
     }
 };
