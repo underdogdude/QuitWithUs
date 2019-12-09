@@ -659,7 +659,7 @@ var render = {
                                 ${ generateDate(res[i].date) }
                             </div>
                             <div class="d-flex flex-column list__diary-detail w-100">
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between px-5">
                                     <div class="is__smoke text-center">
                                         <h4>
                                             ${ res[i].smoking }
