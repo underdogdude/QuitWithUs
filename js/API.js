@@ -14,5 +14,13 @@ var get = {
                 method: "GET"
             })
         )
+    },
+    wallet: function(param) {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/wallet?f=username&q=" + param ,
+                method: "GET"
+            })
+        )
     }
 };

@@ -108,6 +108,7 @@ $("#custom-templates .typeahead")
         render.diseaseSection(datum.item);
         render.drugSection(datum.item);
         render.diarySection(datum.item);
+        render.walletSection(datum.item);
 
         render.init(datum.item);
     });
@@ -639,7 +640,6 @@ var render = {
             }
         });
     },
-
     diarySection: function (data)  {
 
         get.diary(data.username).done(function(res) { 
@@ -714,7 +714,57 @@ var render = {
             }
         });
     },
+    walletSection: function(data){ 
 
+        var nowTimestamp = Math.floor(Date.now() / 1000);
+        var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
+        var myMoney = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2));
+
+        get.wallet(data.username).done(function(res) { 
+            render.remove("#wallet");
+            
+            if(res.length !== 0) { 
+
+                var string = '';
+                var walletList = '';
+                for (var i = 0 ; i < res.length ; i++) { 
+                    
+                    walletList += `
+                        <li class="list-group-item">
+                            <h5> <strong>${ res[i].namereward } </strong></h5>
+                            <h6> ราคา : ${ numberWithCommas(res[i].costreward) }  <small>บาท</small></h6>
+                        </li>
+                    `;
+                }
+
+                string = `
+                    <div class="card mb-4">
+                        <div class="card-title">
+                            <h3>
+                                <i class="fas fa-wallet text__blue"></i> กระเป๋าเงินของเรา
+                            </h3>
+                            <hr />
+                        </div>
+                        <div class="card-content">
+                            <div class="text-center my-4 pb-4">
+                               
+                                <h1 class="font-weight-bold mb-0">
+                                    <span class="text__blue">${ myMoney }</span>
+                                </h1>
+                                <small style="font-size: 20px;">(บาท)</small>
+                            </div>    
+                            <hr />
+                            <ul class="list-group detail__list">
+                                ${ walletList }
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                $("#wallet").append(string);
+            }
+        });
+    },
     remove: function(elems) {
 
         $(elems).empty();
