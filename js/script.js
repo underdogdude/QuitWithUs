@@ -343,6 +343,67 @@ function generateDate(date) {
     `  
 }
 
+function getPagination(res) { 
+
+    $('#pagination-container').pagination({
+    dataSource: res,
+    pageSize: 3,
+    pageRange: null,
+    showPageNumbers: true,
+    className: 'paginationjs-theme-blue float-right',
+    callback: function(data, pagination) {
+        // template method of yourself
+        
+        var diaryList = '';
+
+        for (var i = 0 ; i < data.length ; i++) { 
+            diaryList += `
+                    <li class="list-group-item d-flex">
+                        <div class="d-flex flex-column calendar justify-content-center">
+                           
+                            ${ generateDate(data[i].date) }
+                        </div>
+                        <div class="d-flex flex-column list__diary-detail w-100">
+                            <div class="d-flex justify-content-between px-1">
+                                <div class="is__smoke text-center">
+                                    <h4>
+                                        ${ data[i].smoking }
+                                    </h4>
+                                    <img src="./img/${ data[i].smoking }.png" alt="" width="50px;" />
+                                </div>
+                                <div class="is__want text-center">
+                                    <h4>
+                                        ความอยากบุหรี่
+                                    </h4>
+                                    <h1>
+                                        ${ data[i].thirst }
+                                    </h1>
+                                </div>
+                                <div class="emotion text-center">
+                                    <h4>
+                                        ความรู้สึกในตอนนี้
+                                    </h4>
+                                    <img src="./img/emotions/${data[i].emotion}.png" alt="" width="50px">
+                                    <br />
+                                    <small>${ data[i].emotion }</small>
+                                </div>
+                            </div>
+                            <div class="list__diary-subtext">
+                                ${ isSmokeDetail( data[i] ) }
+                                <small>
+                                    <b>ข้อความ</b> : ${ data[i].additional }
+                                </small>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            }
+
+            $("#diary_content").html(diaryList);
+        }
+    })
+}
+
 var render = {
 
     init: function(data) { 
@@ -648,69 +709,26 @@ var render = {
             if(res.length !== 0) { 
 
                 var string = '';
-                var diaryList = '';
+                    string = `
+                        <div class="card mb-4">
+                            <div class="card-title">
+                                <h3>
+                                    <i class="fas fa-book text__blue"></i> บันทึกประจำวัน
+                                </h3>
+                                <hr />
+                            </div>
+                            <div class="card-content" >
+                                <ul class="list-group list__diary" id="diary_content">
+                                
+                                </ul>
 
-                for (var i = 0 ; i < res.length ; i++) { 
-                    
-                    diaryList += `
-                        <li class="list-group-item d-flex">
-                            <div class="d-flex flex-column calendar justify-content-center">
-                               
-                                ${ generateDate(res[i].date) }
+                                <div id="pagination-container"></div>
                             </div>
-                            <div class="d-flex flex-column list__diary-detail w-100">
-                                <div class="d-flex justify-content-between px-1">
-                                    <div class="is__smoke text-center">
-                                        <h4>
-                                            ${ res[i].smoking }
-                                        </h4>
-                                        <img src="./img/${ res[i].smoking }.png" alt="" width="50px;" />
-                                    </div>
-                                    <div class="is__want text-center">
-                                        <h4>
-                                            ความอยากบุหรี่
-                                        </h4>
-                                        <h1>
-                                            ${ res[i].thirst }
-                                        </h1>
-                                    </div>
-                                    <div class="emotion text-center">
-                                        <h4>
-                                            ความรู้สึกในตอนนี้
-                                        </h4>
-                                        <img src="./img/emotions/${res[i].emotion}.png" alt="" width="50px">
-                                        <br />
-                                        <small>${ res[i].emotion }</small>
-                                    </div>
-                                </div>
-                                <div class="list__diary-subtext">
-                                    ${ isSmokeDetail( res[i] ) }
-                                    <small>
-                                        <b>ข้อความ</b> : ${ res[i].additional }
-                                    </small>
-                                </div>
-                            </div>
-                        </li>
+                        </div>
                     `;
-                }
-                
-                string = `
-                    <div class="card mb-4">
-                        <div class="card-title">
-                            <h3>
-                                <i class="fas fa-book text__blue"></i> บันทึกประจำวัน
-                            </h3>
-                            <hr />
-                        </div>
-                        <div class="card-content">
-                            <ul class="list-group list__diary">
-                                ${ diaryList }
-                            </ul>
-                        </div>
-                    </div>
-                `;
 
                 $("#diary").append(string);
+                getPagination(res);
             }
         });
     },
