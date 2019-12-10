@@ -404,6 +404,13 @@ function getPagination(res) {
     })
 }
 
+function checkStartEndDate( startdate ) { 
+    
+    if(startdate === 0) { 
+        return 'คุณยังไม่ได้กำหนดวันเลิกบุหรี่';
+    }
+}
+
 var render = {
 
     init: function(data) { 
@@ -504,7 +511,22 @@ var render = {
         ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
         var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
         var liftShortSmoking = (allCountSmoke * 7)/525600;
-    
+
+        // 
+        var allQuitSmokeValue, allMoneySave, allLifeLong;
+        if( data.startquitsmoke === 0 ) { 
+
+            allQuitSmokeValue = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
+            allMoneySave = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
+            allLifeLong = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
+        }
+        else {
+
+            allQuitSmokeValue = numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน";
+            allMoneySave = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท";
+            allLifeLong = numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" ;
+        }
+
         var stringAnalyze = ` 
             <div class="card mb-4">
                 <div class="card-title">
@@ -545,19 +567,19 @@ var render = {
     
                         <li class="list-group-item">
                             <b> เลิกสูบบุหรี่ได้ (มวน) </b> : ${ 
-                                numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน"
+                                allQuitSmokeValue
                             }
                         </li>
     
                         <li class="list-group-item">
                             <b> มีเงินเก็บเพิ่มขึ้น (บาท) </b> : ${ 
-                                numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท"
+                                allMoneySave
                             }
                         </li>
     
                         <li class="list-group-item">
                             <b> มีชีวิตยืนยาวขึ้น (วัน ชั่วโมง) </b> : ${ 
-                                numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" 
+                                allLifeLong 
                             }
                         </li>
                     </ul>
@@ -736,7 +758,26 @@ var render = {
 
         var nowTimestamp = Math.floor(Date.now() / 1000);
         var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
-        var myMoney = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2));
+        var myMoney;
+
+        if( data.startquitsmoke === 0 ) { 
+            
+            myMoney = `
+                <h4 class="font-weight-bold mb-0">
+                    <span class="text__blue"> คุณยังไม่ได้กำหนดวันเลิกบุหรี่ </span>
+                </h4>
+            `;
+
+        }else { 
+
+            myMoney = `
+                  
+                <h1 class="font-weight-bold mb-0">
+                    <span class="text__blue">${ numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) }</span>
+                </h1>
+                <small style="font-size: 20px;">(บาท)</small>
+            `
+        }
 
         get.wallet(data.username).done(function(res) { 
             render.remove("#wallet");
@@ -745,15 +786,18 @@ var render = {
 
                 var string = '';
                 var walletList = '';
-                for (var i = 0 ; i < res.length ; i++) { 
+                if(data.startquitsmoke !== 0 ) { 
+                    for (var i = 0 ; i < res.length ; i++) { 
                     
-                    walletList += `
-                        <li class="list-group-item">
-                            <h5> <strong>${ res[i].namereward } </strong></h5>
-                            <h6> ราคา : ${ numberWithCommas(res[i].costreward) }  <small>บาท</small></h6>
-                        </li>
-                    `;
+                        walletList += `
+                            <li class="list-group-item">
+                                <h5> <strong>${ res[i].namereward } </strong></h5>
+                                <h6> ราคา : ${ numberWithCommas(res[i].costreward) }  <small>บาท</small></h6>
+                            </li>
+                        `;
+                    }
                 }
+                
 
                 string = `
                     <div class="card mb-4">
@@ -765,11 +809,8 @@ var render = {
                         </div>
                         <div class="card-content">
                             <div class="text-center my-4 pb-4">
-                               
-                                <h1 class="font-weight-bold mb-0">
-                                    <span class="text__blue">${ myMoney }</span>
-                                </h1>
-                                <small style="font-size: 20px;">(บาท)</small>
+                            ${ myMoney }
+                              
                             </div>    
                             <hr />
                             <ul class="list-group detail__list">
