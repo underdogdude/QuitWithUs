@@ -1,4 +1,12 @@
 var get = {
+    user: function () { 
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/users",
+                method: "GET"
+            })
+        )
+    },
     drug: function(param) {
         return (
             $.ajax({
