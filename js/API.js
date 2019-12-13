@@ -7,6 +7,14 @@ var get = {
             })
         )
     },
+    userData: function (param) { 
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/userdata?q=" + param,
+                method: "GET"
+            })
+        )
+    },
     drug: function(param) {
         return (
             $.ajax({

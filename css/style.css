@@ -411,3 +411,33 @@ footer{
 .btn-toggle[aria-expanded="false"] .right { 
     display: inline;
 }
+
+
+.btn__totop { 
+    font-size: 50px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    color: #efb699;
+    transition: all ease 1s;
+}
+.btn__totop:hover { 
+    color: #ce997f;
+}
+
+
+
+#loading__black {
+    z-index: 99999;
+    background: rgba(0,0,0,0.3);
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    color: #d3f4fb;
+}

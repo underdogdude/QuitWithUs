@@ -1,7 +1,5 @@
 /*
     TODO : 
-        - Icon toggle when collapse
-        - first loading when web onload
         - click card to show detail
         - afterclick auto scoll to top
         - create Button scroll to top
@@ -864,8 +862,6 @@ var render = {
 }
 
 
-
-
 function init() {
 
     get.user().done(function(res) { 
@@ -878,7 +874,7 @@ function init() {
 
             userList += `
                 <div class="col-md-3 user__list-container">
-                    <div class="card text-center user__list"> 
+                    <div class="card text-center user__list" onclick="getUserDetail('${res[i].username}');"> 
                         <div class="avartar" style="background: ${ '#' + randomColor() }">
                             ${res[i].username[0]}
                         </div>
@@ -916,4 +912,35 @@ function randomColor() {
 
 }
 
+function scrollToTop () { 
+    $('html, body').animate({
+        scrollTop: $("body").offset().top
+    }, 500);
+}
+
 init();
+
+
+
+
+
+function getUserDetail(username) { 
+    console.log(this);
+    $("#loading__black").css("display", "flex");
+    get.userData(username).done(function(res) { 
+
+        var datum = res[0]
+        showMainDetail(datum);
+        showDateDetail(datum);
+        render.smokeReasonSection(datum);
+        render.analyzeSection(datum);
+        render.behaviorSection(datum);
+        render.diseaseSection(datum);
+        render.drugSection(datum);
+        render.diarySection(datum);
+        render.walletSection(datum);
+        render.init(datum);
+
+        $("#loading__black").css("display", "none");
+    });
+}
