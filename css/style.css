@@ -396,3 +396,18 @@ footer{
     color: #6a676f;
     font-size: 13px;
 }
+
+
+.btn-toggle[aria-expanded="true"] .down { 
+    display: inline;
+}
+
+.btn-toggle[aria-expanded="true"] .right { 
+    display: none;
+}
+.btn-toggle[aria-expanded="false"] .down { 
+    display: none;
+}
+.btn-toggle[aria-expanded="false"] .right { 
+    display: inline;
+}

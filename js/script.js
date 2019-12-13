@@ -895,8 +895,8 @@ function init() {
 
         string = `
             <h2 class="btn-showall-container">
-                <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    ALL USER (${ res.length }) <i class="fas fa-caret-down"></i>
+                <a class="btn btn-link btn-toggle" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                    ALL USER (${ res.length }) <i class="fas fa-caret-right right"></i><i class="fas fa-caret-down down"></i>
                 </a>
             </h2>
             <div class="collapse show" id="collapseExample">
