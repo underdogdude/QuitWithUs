@@ -389,12 +389,14 @@ footer{
     font-size: 18px;
     margin-top: 10px;
     margin-bottom: 0;
+    word-wrap: break-word;
 }
 
 .user__list h3 { 
     margin-top: 3px;
     color: #6a676f;
     font-size: 13px;
+    word-wrap: break-word;
 }
 
 
