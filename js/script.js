@@ -906,7 +906,7 @@ function init() {
             </div>
         `;
 
-        $(elems).append(string);
+        $(elems).html(string);
     });
 }
 
