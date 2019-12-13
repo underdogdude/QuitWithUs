@@ -59,20 +59,6 @@ var colorSet = [ "FFEBEE", "FFCDD2", "EF9A9A", "E57373", "EF5350", "F44336", "E5
 "ECEFF1", "CFD8DC", "B0BBC5", "90A4AE", "78909C", "607D8B", "546E7A",        //blue grey
 "455A64", "37474F", "263238"]
 
-// var emotions = { 
-//     cannotfocus: "ไม่มีสมาธิ" ,
-//     sad: "เศร้า" ,
-//     happy: "มีความสุข" ,
-//     tired: "อ่อนเพลีย" ,
-//     relax: "ผ่อนคลาย" ,
-//     dizzy: "เวียนหัว" ,
-//     fresh: "สดชื่น" ,
-//     angry: "หงุดหงิด" ,
-//     anxiety: "เครียด" ,
-//     เหม: "เครียด" ,
-
-// }
-
 // Instantiate the Bloodhound suggestion engine
 var users = new Bloodhound({
     datumTokenizer: function(datum) {
@@ -875,7 +861,7 @@ var render = {
 function init() {
 
     get.user().done(function(res) { 
-        console.log(res);
+
         var elems = $("#user_list");
         var string = '';
         var userList = '';
