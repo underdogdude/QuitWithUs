@@ -1,9 +1,3 @@
-/*
-    TODO : 
-        - click card to show detail
-        - afterclick auto scoll to top
-        - create Button scroll to top
-*/
 var diseaseName = { 
     allergy : "โรคภูมิแพ้",
     asthma: "โรคหอบหืด",
@@ -540,9 +534,12 @@ var render = {
         var nowTimestamp = Math.floor(Date.now() / 1000);
         var allCountSmoke = (((data.yearsold - data.startsmoke)*365) + (((data.yearsold - data.startsmoke)/4) + 
         ((nowTimestamp - data.timestamp)/86400))) * data.countsmoke;
-        var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
-        var liftShortSmoking = (allCountSmoke * 7)/525600;
 
+        var timeDiff  = (new Date()) - (new Date(data.startquitsmoke * 1000));
+        var days = timeDiff / (1000 * 60 * 60 * 24);
+        console.log(days);
+        var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
+        var liftShortSmoking = (allCountSmoke * 7)/525600;
         // 
         var allQuitSmokeValue, allMoneySave, allLifeLong;
         if( data.startquitsmoke === 0 ) { 
@@ -555,7 +552,7 @@ var render = {
 
             allQuitSmokeValue = numberWithCommas(allQuitCountSmoke.toFixed(2)) + " มวน";
             allMoneySave = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท";
-            allLifeLong = numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง " + numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน" ;
+            allLifeLong = numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน " + numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง";
         }
 
         var stringAnalyze = ` 
