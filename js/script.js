@@ -784,8 +784,9 @@ var render = {
     },
     walletSection: function(data){ 
 
-        var nowTimestamp = Math.floor(Date.now() / 1000);
-        var allQuitCountSmoke = ( nowTimestamp - data.startquitsmoke ) * data.countsmoke;
+        var timeDiff  = (new Date()) - (new Date(data.startquitsmoke * 1000));
+        var days = timeDiff / (1000 * 60 * 60 * 24);
+        var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
         var myMoney;
 
         if( data.startquitsmoke === 0 ) { 
