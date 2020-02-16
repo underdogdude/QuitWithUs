@@ -257,8 +257,8 @@ function timestampToDate(unix_timestamp) {
     return fullDate;
 }
 
-function exportExcel() { 
-    alert('export excel currently in on instructure. Hang in there');
+function exportExcel(username) { 
+    save(username);
 }
 
 function returnHas(number){ 
@@ -438,15 +438,15 @@ function checkStartEndDate( startdate ) {
 
 var render = {
 
-    init: function(data) { 
-
+    init: function(data) {  
+        console.log(data ,' this is adata');
         $("#last_modify").empty();
         $("#last_modify").append(`
             <small>
                 <i class="text-secondary" id="last_modify">
                     Last Modified : ${ timestampToDate(data.timestamp) } 
                 </i>
-                <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
+                <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel('${ data.username }')">
                     <i class="far fa-file-excel"></i>
                 </button>
             </small>
