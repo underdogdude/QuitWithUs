@@ -59,6 +59,78 @@ var colorSet = [ "FFEBEE", "FFCDD2", "EF9A9A", "E57373", "EF5350", "F44336", "E5
 "ECEFF1", "CFD8DC", "B0BBC5", "90A4AE", "78909C", "607D8B", "546E7A",        //blue grey
 "455A64", "37474F", "263238"]
 
+
+
+
+
+var data_for_export = {
+    filename: "", 
+
+    userinfo_data: {
+        date: "",
+        name: "",
+        quit_for: "",
+        gender: "",
+        age: "",
+        has_personal_disease: "",
+        personal_disease:"",
+        age_start_smoke:"",
+        count_smoke: "",
+        time_smoke: "",
+        want_smoke: ""
+    },
+
+    canquit_data: { 
+        all_smoke: "",
+        money_on_smoke: "",
+        life_decrease: "",
+        reason_smoke: "",
+        nicotine_level: "",
+        date_quite: "",
+        count_smoke: "",
+        many_quit : "",
+        money: "",
+        lifelong: "",
+        reward: "",
+        reward_price: ""
+    },
+
+    oursuccess_data: {
+        date_memo: "",
+        want_smoke_level:"",
+        emotion: "",
+        smoking: "",
+        oursuccess_data: "",
+        smoke_count: "",
+        smoke_activity: "",
+        smoke_with: "",
+        message: "",
+        date_in_graph: ""
+    },
+
+    ourpill_data: {
+        pill_name: "",
+        pill_size: "",
+        pill_per_time: "",
+        howto: "",
+        time_to_use: "",
+        frequenzy_pill: "",
+        date_start_pill:"",
+        date_end_pill: ""
+    },
+
+    like_data: { 
+        m_suggest: "",
+        m_help: "",
+        a_talk:"",
+        m_persuade: "",
+        c_quit: "",
+        c_want: "",
+        c_smoke: ""
+    }
+}
+
+
 // Instantiate the Bloodhound suggestion engine
 var users = new Bloodhound({
     datumTokenizer: function(datum) {
@@ -143,6 +215,7 @@ function showMainDetail(data) {
         $(elems).empty();
 
     var gender = ''; 
+    var gender_text = '';
 
     if ( data.gender === 0 ) { 
 
@@ -153,6 +226,8 @@ function showMainDetail(data) {
                     <span class="card__subtext">เพศ</span>
                     <i class="card__icon fas fa-mars"></i>
                 </div> `;
+
+        gender_text = "Male";
     }else { 
 
         gender = `
@@ -164,6 +239,7 @@ function showMainDetail(data) {
                 <i class="card__icon fas fa-venus"></i>
             </div>
         `;
+        gender_text = "Female";
     }
 
     var string = `
@@ -203,6 +279,12 @@ function showMainDetail(data) {
     `;
     
     $(elems).append(string);
+
+    // setDataToexport 
+    setDataToExport("userinfo_data","name", data.name);
+    setDataToExport("userinfo_data","gender", gender_text);
+    setDataToExport("userinfo_data","age", data.yearsold);
+
 }
 
 function showDateDetail (data) {
@@ -241,6 +323,11 @@ function showDateDetail (data) {
     `;
     $(elems).append(string);
     timestampToDate(data.endquitsmoke);
+
+    // setDataToexport 
+    setDataToExport("userinfo_data","date", timestampToDate(data.startquitsmoke));
+    setDataToExport("userinfo_data","want_smoke", data.demandquit);
+
 }
 
 function timestampToDate(unix_timestamp) { 
@@ -257,8 +344,8 @@ function timestampToDate(unix_timestamp) {
     return fullDate;
 }
 
-function exportExcel(username) { 
-    save(username);
+function exportExcel() { 
+    save(data_for_export);
 }
 
 function returnHas(number){ 
@@ -438,15 +525,19 @@ function checkStartEndDate( startdate ) {
 
 var render = {
 
+
     init: function(data) {  
-        console.log(data ,' this is adata');
+
+        // Set File Name
+        data_for_export["filename"] = data.username;
+        
         $("#last_modify").empty();
         $("#last_modify").append(`
             <small>
                 <i class="text-secondary" id="last_modify">
                     Last Modified : ${ timestampToDate(data.timestamp) } 
                 </i>
-                <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel('${ data.username }')">
+                <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
                     <i class="far fa-file-excel"></i>
                 </button>
             </small>
@@ -941,4 +1032,9 @@ function getUserDetail(username) {
 
         $("#loading__black").css("display", "none");
     });
+}
+
+
+function setDataToExport(sheet = '', data = '', value = '') { 
+    data_for_export[sheet][data] = value;
 }

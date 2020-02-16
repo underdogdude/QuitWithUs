@@ -60,75 +60,75 @@ function s2ab(s) {
 }
 
 
-function save(username){
+function save(data){
 
 	/* original data */
     var userinfo_data = [
         ["หัวข้อ"],
-        ["วันที่เริ่มเข้าใช้งาน" ," วัน", "เดือน", "ปี"],
-        ["ชื่อที่ใช้สร้างบัญชี"],
-        ["เลิกบุหรี่เพื่อ"],
-        ["เพศ"],
-        ["อายุ", "ปี"],
-        ["โรคประจำตัว (มี/ ไม่มี)"],
-        ["(ถ้ามี) โรคประจำตัว"],
-        ["อายุที่เริ่มสูบบุหรี่", "ปี"],
-        ["จำนวนบุหรี่ที่สูบต่อวัน", "มวน"],
-        ["เวลาที่สูบบุหรี่มวนแรก"],
-        ["ความต้องการเลิกสูบบุหรี่"],
+        ["วันที่เริ่มเข้าใช้งาน" , data.userinfo_data.date],
+        ["ชื่อที่ใช้สร้างบัญชี", data.userinfo_data.name ],
+        ["เลิกบุหรี่เพื่อ", data.userinfo_data.quit_for],
+        ["เพศ", data.userinfo_data.gender],
+        ["อายุ", data.userinfo_data.age + " ปี"],
+        ["โรคประจำตัว (มี/ ไม่มี)" , data.userinfo_data.has_personal_disease ],
+        ["(ถ้ามี) โรคประจำตัว", data.userinfo_data.personal_disease],
+        ["อายุที่เริ่มสูบบุหรี่", data.userinfo_data.age_start_smoke + " ปี"],
+        ["จำนวนบุหรี่ที่สูบต่อวัน",data.userinfo_data.count_smoke + " มวน"],
+        ["เวลาที่สูบบุหรี่มวนแรก" ,data.userinfo_data.time_smoke],
+        ["ความต้องการเลิกสูบบุหรี่" ,data.userinfo_data.want_smoke],
     ];
 
     var canquit_data = [
         ["หัวข้อ"],
-        ["สูบบุหรี่มาแล้ว" ,"มวน"],
-        ["เสียเงินให้บุหรี่" ,"บาท"],
-        ["ชีวิตที่สั้นลงจากการสูบบุหรี่" ,"ปี", "วัน"],
-        ["สาเหตุการสูบบุหรี่" ,"มี7แบบ"],
-        ["ระดับการติดสารนิโคตินในบุหรี่" ,"3ระดับ"],
-        ["เวลาที่กำหนดเลิกบุหรี่ครั้งล่าสุด" ," วัน", "เดือน", "ปี"],
-        ["จำนวนครั้งที่เคยกำหนดวันเลิกบุหรี่นับรวมครั้งล่าสุดด้วย" ],
-        ["เลิกสูบบุหรี่ได้" ,"มวน"],
-        ["มีเงินเก็บเพิ่มขึ้น" ,"บาท"],
-        ["มีชีวิตยืนยาวขึ้น" ,"วัน", "ชั่วโมง"],
-        ["รายการรางวัลในการเก็บเงิน" ],
-        ["มูลค่ารางวัล", "บาท" ]
+        ["สูบบุหรี่มาแล้ว"  , data.canquit_data.all_smoke + "มวน"],
+        ["เสียเงินให้บุหรี่" , data.canquit_data.money_on_smoke + "บาท"],
+        ["ชีวิตที่สั้นลงจากการสูบบุหรี่" , data.canquit_data.life_decrease],
+        ["สาเหตุการสูบบุหรี่" , data.canquit_data.reason_smoke],
+        ["ระดับการติดสารนิโคตินในบุหรี่" , data.canquit_data.nicotine_level],
+        ["เวลาที่กำหนดเลิกบุหรี่ครั้งล่าสุด" , data.canquit_data.date_quite],
+        ["จำนวนครั้งที่เคยกำหนดวันเลิกบุหรี่นับรวมครั้งล่าสุดด้วย" , data.canquit_data.count_smoke],
+        ["เลิกสูบบุหรี่ได้"  , data.canquit_data.many_quit + "มวน"],
+        ["มีเงินเก็บเพิ่มขึ้น" , data.canquit_data.money + "บาท"],
+        ["มีชีวิตยืนยาวขึ้น" , data.canquit_data.lifelong],
+        ["รายการรางวัลในการเก็บเงิน" , data.canquit_data.reward],
+        ["มูลค่ารางวัล", data.canquit_data.reward_price + "บาท" ]
     ];
 
     var oursuccess_data = [
         ["หัวข้อ"],
-        ["วันที่บันทึก" ," วัน", "เดือน", "ปี"],
-        ["ความอยากบุหรี่(1-10)"],
-        ["ความรู้สึก"],
-        ["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)"],
-        ["ข้อความความสำเร็จของเรา"],
-        ["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ"],
-        ["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่"],
-        ["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่"],
-        ["ข้อความเราเรียนรู้"],
-        ["จำนวนวันในกราฟความสำเร็จของเรา"],
+        ["วันที่บันทึก", data.oursuccess_data.date_memo],
+        ["ความอยากบุหรี่(1-10)", data.oursuccess_data.want_smoke_level],
+        ["ความรู้สึก", data.oursuccess_data.emotion],
+        ["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)", data.oursuccess_data.smoking],
+        ["ข้อความความสำเร็จของเรา", data.oursuccess_data.oursuccess_data],
+        ["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ", data.oursuccess_data.smoke_count],
+        ["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่", data.oursuccess_data.smoke_activity],
+        ["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", data.oursuccess_data.smoke_with],
+        ["ข้อความเราเรียนรู้" , data.oursuccess_data.message],
+        ["จำนวนวันในกราฟความสำเร็จของเรา" , data.oursuccess_data.date_in_graph],
     ];
 
     var ourpill_data = [
         ["หัวข้อ"],
-        ["ชื่อยา"],
-        ["ขนาดยา"],
-        ["ครั้งละ"],
-        ["วิธีใช้"],
-        ["เวลาใช้ยา"],
-        ["ความถี่ในการใช้ยา"],
-        ["เริ่มใช้ยา"],
-        ["ถึงวันที่"],
+        ["ชื่อยา"   , data.ourpill_data.pill_name],
+        ["ขนาดยา" , data.ourpill_data.pill_size],
+        ["ครั้งละ"  , data.ourpill_data.pill_per_time] ,
+        ["วิธีใช้"   , data.ourpill_data.howto],
+        ["เวลาใช้ยา"  , data.ourpill_data.time_to_use],
+        ["ความถี่ในการใช้ยา" , data.ourpill_data.frequenzy_pill],
+        ["เริ่มใช้ยา" , data.ourpill_data.date_start_pill],
+        ["ถึงวันที่" , data.ourpill_data.date_end_pill],
     ];
 
     var like_data = [
         ["หัวข้อ", "สถิติการกด Like"],
-        ["บทความต่างๆ หน้าเราแนะนำ"],
-        ["บทความต่างๆ หน้าให้เราช่วย"],
-        ["คำตอบต่างๆ หน้าพูดคุยกับเรา"],
-        ["ข้อความจูงใจให้เลิกบุหรี่"],
-        ["ข้อความให้กำลังใจในการเลิกบุหรี่"],
-        ["ข้อความให้กำลังใจเมื่ออยากสูบบุหรี่"],
-        ["ข้อความเสริมกำลังใจเมื่อเผลอสูบบุหรี่"],
+        ["บทความต่างๆ หน้าเราแนะนำ", data.like_data.m_suggest],
+        ["บทความต่างๆ หน้าให้เราช่วย", data.like_data.m_help],
+        ["คำตอบต่างๆ หน้าพูดคุยกับเรา", data.like_data.a_talk],
+        ["ข้อความจูงใจให้เลิกบุหรี่", data.like_data.m_persuade],
+        ["ข้อความให้กำลังใจในการเลิกบุหรี่", data.like_data.c_quit],
+        ["ข้อความให้กำลังใจเมื่ออยากสูบบุหรี่", data.like_data.c_want],
+        ["ข้อความเสริมกำลังใจเมื่อเผลอสูบบุหรี่", data.like_data.c_smoke],
     ]
 
 	var wb = new Workbook(); 
@@ -154,5 +154,5 @@ function save(username){
     wb.Sheets[ws5] = sheet_from_array_of_arrays(like_data);
     
 	var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
-	saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), username + ".xlsx")
+	saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), data.filename + ".xlsx")
 }
