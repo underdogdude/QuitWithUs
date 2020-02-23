@@ -95,29 +95,21 @@ var data_for_export = {
         reward_price: ""
     },
 
-    oursuccess_data: {
-        date_memo: "",
-        want_smoke_level:"",
-        emotion: "",
-        smoking: "",
-        oursuccess_data: "",
-        smoke_count: "",
-        smoke_activity: "",
-        smoke_with: "",
-        message: "",
-        date_in_graph: ""
-    },
+    // oursuccess_data: {
+    //     date_memo: "",
+    //     want_smoke_level:"",
+    //     emotion: "",
+    //     smoking: "",
+    //     oursuccess_data: "",
+    //     smoke_count: "",
+    //     smoke_activity: "",
+    //     smoke_with: "",
+    //     message: "",
+    //     date_in_graph: ""
+    // },
+    oursuccess_data: [],
 
-    ourpill_data: {
-        pill_name: "",
-        pill_size: "",
-        pill_per_time: "",
-        howto: "",
-        time_to_use: "",
-        frequenzy_pill: "",
-        date_start_pill:"",
-        date_end_pill: ""
-    },
+    ourpill_data : [],
 
     like_data: { 
         m_suggest: "",
@@ -196,7 +188,9 @@ $("#custom-templates .typeahead")
     })
     .on("typeahead:selected", function(obj, datum) {
 
-        console.log(datum.item);
+        // clear array for excel
+        clearArray();
+
         showMainDetail(datum.item);
         showDateDetail(datum.item);
         render.smokeReasonSection(datum.item);
@@ -326,7 +320,7 @@ function showDateDetail (data) {
 
     // setDataToexport 
     setDataToExport("userinfo_data","date", timestampToDate(data.startquitsmoke));
-    setDataToExport("userinfo_data","want_smoke", data.demandquit);
+    setDataToExport("userinfo_data","want_smoke", data.demandquit.toString());
 
 }
 
@@ -454,6 +448,31 @@ function generateDate(date) {
         </h3>
     `  
 }
+function generateDateForExcel(date) { 
+
+    var splitDate = date.split('-');
+    var monthLists = { 
+        '01' : 'JAN',
+        '02' : 'FEB',
+        '03' : 'MAR',
+        '04' : 'APR',
+        '05' : 'MAY',
+        '06' : 'JUN',
+        '07' : 'JUL',
+        '08' : 'AUG',
+        '09' : 'SEP',
+        '10' : 'OCT',
+        '11' : 'NOV',
+        '12' : 'DEC'
+    }
+    var year = splitDate[0];
+    var month = splitDate[1];
+    var date = splitDate[2].split('T');
+        date = date[0];
+
+    return date + " " + monthLists[month] + " " + year;
+    
+}
 
 function getPagination(res) { 
 
@@ -509,7 +528,7 @@ function getPagination(res) {
                         </div>
                     </li>
                 `;
-            }
+            }   
 
             $("#diary_content").html(diaryList);
         }
@@ -556,6 +575,9 @@ var render = {
         var nicotine = 0; 
         var chart = '';
 
+        var reason_string = '';
+
+
         for (var k in whenSmoke){
             if (whenSmoke.hasOwnProperty(k) && data[k] !== 0) {
 
@@ -572,34 +594,54 @@ var render = {
         }
         // behavoir
         if ( behavior >= 1 && emotion === 0 && nicotine === 0 ) { 
-            chart = `<img src="./img/chart/behaviorandsocial.png" alt="พฤติกรรม" width="100%" /> <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม</h6>`
+
+            chart = `<img src="./img/chart/behaviorandsocial.png" alt="พฤติกรรม" width="100%" /> <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม</h6>`;
+            reason_string = "สูบบุหรี่เพราะติดทางพฤติกรรม และสังคม";
         }
         else if( behavior >= 1 && emotion >= 1 && nicotine === 0 ) {
+
             chart = `<img src="./img/chart/behaviorandemotion.png" alt="พฤติกรรม+อารมณ์" width="100%" />
             <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์</h6>`
+            reason_string = "สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์";
+
         }
         else if( behavior >= 1 && emotion === 0 && nicotine >= 1 ) {
+
             chart = `<img src="./img/chart/behaviorandnicotine.png" alt="พฤติกรรม+สารนิโคติน" width="100%" />
-            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน</h6>`
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน</h6>`;
+            reason_string = "สูบบุหรี่เพราะติดทางพฤติกรรม+สารนิโคติน";
+
         }
         else if( behavior >= 1 && emotion >= 1 && nicotine >= 1 ) {
             chart = `<img src="./img/chart/behaviorandemotionandnicotine.png" alt="พฤติกรรม+อารมณ์+สารนิโคติน" width="100%" />
-            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน</h6>`
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน</h6>`;
+            
+            reason_string = "สูบบุหรี่เพราะติดทางพฤติกรรม+อารมณ์+สารนิโคติน";
         }
         else if( behavior === 0 && emotion >= 1 && nicotine === 0 ) {
+
             chart = `<img src="./img/chart/emotionandmind.png" alt="อารมณ์" width="100%" />
-            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์</h6>`
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์</h6>`;
+            reason_string = "สูบบุหรี่เพราะติดทางอารมณ์";
+
         }
         else if( behavior === 0 && emotion >= 1 && nicotine >= 1 ) {
+
             chart = `<img src="./img/chart/emotionandnicotine.png" alt="อารมณ์+สารนิโคติน" width="100%" />
-            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน</h6>`
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน</h6>`;
+            reason_string = "สูบบุหรี่เพราะติดทางอารมณ์+สารนิโคติน";
+
         }
         else if( behavior === 0 && emotion === 0 && nicotine >= 1 ) {
+
             chart = `<img src="./img/chart/nicotine.png" alt="สารนิโคติน" width="100%" />
-            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดสารนิโคติน</h6>`
+            <h6 class="text-center mt-3">สูบบุหรี่เพราะติดสารนิโคติน</h6>`;
+            reason_string = "สูบบุหรี่เพราะติดสารนิโคติน";
+
         }
         else { 
             chart = 'n/A';
+            reason_string = "n/A";
         }
 
         var string = `
@@ -617,6 +659,10 @@ var render = {
         `;
 
         $("#smoke_reason").append(string);
+
+          // setDataToexport 
+        setDataToExport("canquit_data","reason_smoke", reason_string);
+
     },
     analyzeSection: function(data) {
 
@@ -628,11 +674,20 @@ var render = {
 
         var timeDiff  = (new Date()) - (new Date(data.startquitsmoke * 1000));
         var days = timeDiff / (1000 * 60 * 60 * 24);
-        console.log(days);
         var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
         var liftShortSmoking = (allCountSmoke * 7)/525600;
         // 
         var allQuitSmokeValue, allMoneySave, allLifeLong;
+
+        // Export EXCEL PARAMETER
+        var all_smoke_string = "";
+        var money_on_smoke_string = "";
+        var life_decrease_string = "";
+        var nicotine_level_string = "";
+        var many_quit_string = "";
+        var money_string = "";
+        var lifelong_string = "";
+
         if( data.startquitsmoke === 0 ) { 
 
             allQuitSmokeValue = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
@@ -645,6 +700,17 @@ var render = {
             allMoneySave = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) + " บาท";
             allLifeLong = numberWithCommas(((allQuitCountSmoke * 0.1167) / 24).toFixed(2) ) + " วัน " + numberWithCommas((allQuitCountSmoke * 0.1167).toFixed(2)) + " ชั่วโมง";
         }
+
+        all_smoke_string =  numberWithCommas( allCountSmoke.toFixed(2) );
+        money_on_smoke_string = numberWithCommas( (allCountSmoke * data.cost).toFixed(2) );
+        life_decrease_string =  numberWithCommas( liftShortSmoking.toFixed(2) ) + " ปี" + " " + 
+                                numberWithCommas( (liftShortSmoking * 365).toFixed(2) ) + " วัน" ;
+        nicotine_level_string = calculateNicotine(data.countsmoke);
+        many_quit_string = allQuitSmokeValue;
+        money_string = allMoneySave;
+        lifelong_string = allLifeLong;
+
+
 
         var stringAnalyze = ` 
             <div class="card mb-4">
@@ -706,6 +772,16 @@ var render = {
             </div>`;
 
         $("#analyze").append(stringAnalyze);
+
+        // setDataToexport 
+        setDataToExport("canquit_data","all_smoke",all_smoke_string);
+        setDataToExport("canquit_data","money_on_smoke",money_on_smoke_string);
+        setDataToExport("canquit_data","life_decrease",life_decrease_string);
+        setDataToExport("canquit_data","nicotine_level",nicotine_level_string);
+        setDataToExport("canquit_data","many_quit",many_quit_string);
+        setDataToExport("canquit_data","money",money_string);
+        setDataToExport("canquit_data","lifelong",lifelong_string);
+
     },
     behaviorSection: function(data) { 
 
@@ -746,19 +822,30 @@ var render = {
         `;
         $("#behavior").append(string);
 
+        // setDataToexport 
+        setDataToExport("userinfo_data","age_start_smoke", data.startsmoke);
+        setDataToExport("userinfo_data","count_smoke", data.countsmoke);
+        setDataToExport("userinfo_data","time_smoke", data.whenstart);
+        setDataToExport("userinfo_data","quit_for", data.reason);
+
     },
     diseaseSection: function(data) { 
 
         render.remove("#disease");
 
         var stringDisease = '';
+        var has_personal_disease_string = "ไม่มี";
+        var personal_disease_string = "";
 
         if(data.disease === 1) { 
-    
+
             var stringDiseaseList = '';
+                has_personal_disease_string = "มี";  
+
             for (var k in diseaseName){
                 if (diseaseName.hasOwnProperty(k) && data[k] !== 0 && data[k] !== "") {
-    
+                    
+                    personal_disease_string += diseaseName[k] + ",";
                     stringDiseaseList += `
                         <li class="list-group-item">
                             <b>${ diseaseName[k] }</b> : ${ returnHas(data[k]) }
@@ -785,12 +872,19 @@ var render = {
         }
         $("#disease").append(stringDisease);
 
+        // setDataToexport 
+        setDataToExport("userinfo_data","has_personal_disease", has_personal_disease_string);
+        // Has to remove "," from string
+        setDataToExport("userinfo_data","personal_disease", personal_disease_string.slice(0, -1));
+
     },
     drugSection: function(data) { 
         
         get.drug(data.username).done(function(res) { 
         
             render.remove("#drug");
+
+            data_for_export.ourpill_data.push(["หัวข้อ"]);
 
             if(res.length !== 0) { 
 
@@ -820,6 +914,16 @@ var render = {
                             </small>
                         </li>
                     `;
+
+                    data_for_export.ourpill_data.push(["ชื่อยา", res[i].name]);
+                    data_for_export.ourpill_data.push(["ขนาดยา", res[i].size]);
+                    data_for_export.ourpill_data.push(["ครั้งละ", res[i].quantity]);
+                    data_for_export.ourpill_data.push(["วิธีใช้", res[i].method]);
+                    data_for_export.ourpill_data.push(["เวลาใช้ยา", res[i].time]);
+                    data_for_export.ourpill_data.push(["ความถี่ในการใช้ยา", res[i].frequenzy]);
+                    data_for_export.ourpill_data.push(["เริ่มใช้ยา", generateDateForExcel(res[i].startdate) ]);
+                    data_for_export.ourpill_data.push(["ถึงวันที่", generateDateForExcel(res[i].stopdate) ]);
+                    data_for_export.ourpill_data.push([""]);
                 }
                 
                 string = `
@@ -838,7 +942,18 @@ var render = {
                     </div>
                 `;
 
+
                 $("#drug").append(string);
+            }else { 
+
+                data_for_export.ourpill_data.push(["ชื่อยา", '-']);
+                data_for_export.ourpill_data.push(["ขนาดยา", '-']);
+                data_for_export.ourpill_data.push(["ครั้งละ", '-']);
+                data_for_export.ourpill_data.push(["วิธีใช้", '-']);
+                data_for_export.ourpill_data.push(["เวลาใช้ยา", '-']);
+                data_for_export.ourpill_data.push(["ความถี่ในการใช้ยา", '-']);
+                data_for_export.ourpill_data.push(["เริ่มใช้ยา", '-']);
+                data_for_export.ourpill_data.push(["ถึงวันที่", '-']);
             }
         });
     },
@@ -847,6 +962,9 @@ var render = {
         get.diary(data.username).done(function(res) { 
             
             render.remove("#diary");
+
+            data_for_export.oursuccess_data.push(["หัวข้อ"]);
+
             if(res.length !== 0) { 
 
                 var string = '';
@@ -870,6 +988,46 @@ var render = {
 
                 $("#diary").append(string);
                 getPagination(res);
+
+
+                // add for excel 
+                for (var i = 0 ; i < res.length ; i++) { 
+
+                    var text_we_achieve = "-";
+                    var text_we_learn = "-";
+    
+                    if (res[i].smoking === "สูบบุหรี่") { 
+                        text_we_learn = res[i].additional ;
+                    }else { 
+                        text_we_achieve = res[i].additional ;
+                    }
+                    
+                    data_for_export.oursuccess_data.push(["วันที่บันทึก", generateDateForExcel(res[i].date)]);
+                    data_for_export.oursuccess_data.push(["ความอยากบุหรี่(1-10)", res[i].thirst]);
+                    data_for_export.oursuccess_data.push(["ความรู้สึก", res[i].emotion]);
+                    data_for_export.oursuccess_data.push(["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)", res[i].smoking]);
+                    data_for_export.oursuccess_data.push(["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ", res[i].number]);
+                    data_for_export.oursuccess_data.push(["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่", res[i].activity]);
+                    data_for_export.oursuccess_data.push(["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", res[i].people]);
+                    data_for_export.oursuccess_data.push(["ข้อความความสำเร็จของเรา", text_we_achieve]);
+                    data_for_export.oursuccess_data.push(["ข้อความเราเรียนรู้", text_we_learn]);
+                    data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา", res.length.toString() ]);
+                    data_for_export.oursuccess_data.push([""]);
+    
+                }
+            }
+            else { 
+
+                data_for_export.oursuccess_data.push(["วันที่บันทึก", '-']);
+                data_for_export.oursuccess_data.push(["ความอยากบุหรี่(1-10)", '-']);
+                data_for_export.oursuccess_data.push(["ความรู้สึก", '-']);
+                data_for_export.oursuccess_data.push(["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)", '-']);
+                data_for_export.oursuccess_data.push(["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ", '-']);
+                data_for_export.oursuccess_data.push(["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่", '-']);
+                data_for_export.oursuccess_data.push(["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", '-']);
+                data_for_export.oursuccess_data.push(["ข้อความความสำเร็จของเรา", '-']);
+                data_for_export.oursuccess_data.push(["ข้อความเราเรียนรู้", '-']);
+                data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา", '-']);
             }
         });
     },
@@ -880,6 +1038,9 @@ var render = {
         var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
         var myMoney;
 
+        var reward_text = "-";
+        var reward_price_text = "-";
+
         if( data.startquitsmoke === 0 ) { 
             
             myMoney = `
@@ -887,6 +1048,8 @@ var render = {
                     <span class="text__blue"> คุณยังไม่ได้กำหนดวันเลิกบุหรี่ </span>
                 </h4>
             `;
+
+            reward_price_text = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
 
         }else { 
 
@@ -896,7 +1059,9 @@ var render = {
                     <span class="text__blue">${ numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2)) }</span>
                 </h1>
                 <small style="font-size: 20px;">(บาท)</small>
-            `
+            `;
+
+            reward_price_text = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2));
         }
 
         get.wallet(data.username).done(function(res) { 
@@ -915,6 +1080,8 @@ var render = {
                                 <h6> ราคา : ${ numberWithCommas(res[i].costreward) }  <small>บาท</small></h6>
                             </li>
                         `;
+
+                        reward_text += res[i].namereward + ",";
                     }
                 }
                 
@@ -941,7 +1108,14 @@ var render = {
                 `;
 
                 $("#wallet").append(string);
+
+            }else { 
+
             }
+
+            // setDataToexport 
+            setDataToExport("canquit_data","reward", reward_text.slice(0, -1));
+            setDataToExport("canquit_data","reward_price", reward_price_text);
         });
     },
     remove: function(elems) {
@@ -1014,10 +1188,12 @@ init();
 
 
 function getUserDetail(username) { 
-    console.log(this);
+
+    // clear array for excel
+    clearArray()
+
     $("#loading__black").css("display", "flex");
     get.userData(username).done(function(res) { 
-
         var datum = res[0]
         showMainDetail(datum);
         showDateDetail(datum);
@@ -1037,4 +1213,54 @@ function getUserDetail(username) {
 
 function setDataToExport(sheet = '', data = '', value = '') { 
     data_for_export[sheet][data] = value;
+}
+
+
+function clearArray() { 
+    data_for_export = {
+        filename: "", 
+    
+        userinfo_data: {
+            date: "",
+            name: "",
+            quit_for: "",
+            gender: "",
+            age: "",
+            has_personal_disease: "",
+            personal_disease:"",
+            age_start_smoke:"",
+            count_smoke: "",
+            time_smoke: "",
+            want_smoke: ""
+        },
+    
+        canquit_data: { 
+            all_smoke: "",
+            money_on_smoke: "",
+            life_decrease: "",
+            reason_smoke: "",
+            nicotine_level: "",
+            date_quite: "",
+            count_smoke: "",
+            many_quit : "",
+            money: "",
+            lifelong: "",
+            reward: "",
+            reward_price: ""
+        },
+    
+        oursuccess_data: [],
+    
+        ourpill_data : [],
+    
+        like_data: { 
+            m_suggest: "",
+            m_help: "",
+            a_talk:"",
+            m_persuade: "",
+            c_quit: "",
+            c_want: "",
+            c_smoke: ""
+        }
+    }
 }

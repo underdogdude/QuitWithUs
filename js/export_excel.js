@@ -80,45 +80,48 @@ function save(data){
 
     var canquit_data = [
         ["หัวข้อ"],
-        ["สูบบุหรี่มาแล้ว"  , data.canquit_data.all_smoke + "มวน"],
-        ["เสียเงินให้บุหรี่" , data.canquit_data.money_on_smoke + "บาท"],
+        ["สูบบุหรี่มาแล้ว"  , data.canquit_data.all_smoke + " มวน"],
+        ["เสียเงินให้บุหรี่" , data.canquit_data.money_on_smoke + " บาท"],
         ["ชีวิตที่สั้นลงจากการสูบบุหรี่" , data.canquit_data.life_decrease],
         ["สาเหตุการสูบบุหรี่" , data.canquit_data.reason_smoke],
         ["ระดับการติดสารนิโคตินในบุหรี่" , data.canquit_data.nicotine_level],
         ["เวลาที่กำหนดเลิกบุหรี่ครั้งล่าสุด" , data.canquit_data.date_quite],
         ["จำนวนครั้งที่เคยกำหนดวันเลิกบุหรี่นับรวมครั้งล่าสุดด้วย" , data.canquit_data.count_smoke],
-        ["เลิกสูบบุหรี่ได้"  , data.canquit_data.many_quit + "มวน"],
-        ["มีเงินเก็บเพิ่มขึ้น" , data.canquit_data.money + "บาท"],
+        ["เลิกสูบบุหรี่ได้"  , data.canquit_data.many_quit ],
+        ["มีเงินเก็บเพิ่มขึ้น" , data.canquit_data.money ],
         ["มีชีวิตยืนยาวขึ้น" , data.canquit_data.lifelong],
         ["รายการรางวัลในการเก็บเงิน" , data.canquit_data.reward],
-        ["มูลค่ารางวัล", data.canquit_data.reward_price + "บาท" ]
+        ["มูลค่ารางวัล", data.canquit_data.reward_price + " บาท" ]
     ];
 
-    var oursuccess_data = [
-        ["หัวข้อ"],
-        ["วันที่บันทึก", data.oursuccess_data.date_memo],
-        ["ความอยากบุหรี่(1-10)", data.oursuccess_data.want_smoke_level],
-        ["ความรู้สึก", data.oursuccess_data.emotion],
-        ["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)", data.oursuccess_data.smoking],
-        ["ข้อความความสำเร็จของเรา", data.oursuccess_data.oursuccess_data],
-        ["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ", data.oursuccess_data.smoke_count],
-        ["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่", data.oursuccess_data.smoke_activity],
-        ["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", data.oursuccess_data.smoke_with],
-        ["ข้อความเราเรียนรู้" , data.oursuccess_data.message],
-        ["จำนวนวันในกราฟความสำเร็จของเรา" , data.oursuccess_data.date_in_graph],
-    ];
+    // var oursuccess_data = [
+    //     ["หัวข้อ"],
+    //     ["วันที่บันทึก", data.oursuccess_data.date_memo],
+    //     ["ความอยากบุหรี่(1-10)", data.oursuccess_data.want_smoke_level],
+    //     ["ความรู้สึก", data.oursuccess_data.emotion],
+    //     ["สูบบุหรี่หรือไม่ (ไม่สูบ/ สูบ)", data.oursuccess_data.smoking],
+    //     ["ข้อความความสำเร็จของเรา", data.oursuccess_data.oursuccess_data],
+    //     ["(ถ้าสูบ)จำนวนบุหรี่ที่สูบ", data.oursuccess_data.smoke_count],
+    //     ["(ถ้าสูบ)กิจกรรมที่ทำขณะสูบบุหรี่", data.oursuccess_data.smoke_activity],
+    //     ["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", data.oursuccess_data.smoke_with],
+    //     ["ข้อความเราเรียนรู้" , data.oursuccess_data.message],
+    //     ["จำนวนวันในกราฟความสำเร็จของเรา" , data.oursuccess_data.date_in_graph],
+    // ];
 
-    var ourpill_data = [
-        ["หัวข้อ"],
-        ["ชื่อยา"   , data.ourpill_data.pill_name],
-        ["ขนาดยา" , data.ourpill_data.pill_size],
-        ["ครั้งละ"  , data.ourpill_data.pill_per_time] ,
-        ["วิธีใช้"   , data.ourpill_data.howto],
-        ["เวลาใช้ยา"  , data.ourpill_data.time_to_use],
-        ["ความถี่ในการใช้ยา" , data.ourpill_data.frequenzy_pill],
-        ["เริ่มใช้ยา" , data.ourpill_data.date_start_pill],
-        ["ถึงวันที่" , data.ourpill_data.date_end_pill],
-    ];
+    var oursuccess_data = data.oursuccess_data;
+
+    // var ourpill_data = [
+    //     ["หัวข้อ"],
+    //     ["ชื่อยา"   , data.ourpill_data.pill_name],
+    //     ["ขนาดยา" , data.ourpill_data.pill_size],
+    //     ["ครั้งละ"  , data.ourpill_data.pill_per_time] ,
+    //     ["วิธีใช้"   , data.ourpill_data.howto],
+    //     ["เวลาใช้ยา"  , data.ourpill_data.time_to_use],
+    //     ["ความถี่ในการใช้ยา" , data.ourpill_data.frequenzy_pill],
+    //     ["เริ่มใช้ยา" , data.ourpill_data.date_start_pill],
+    //     ["ถึงวันที่" , data.ourpill_data.date_end_pill],
+    // ];
+    var ourpill_data = data.ourpill_data;
 
     var like_data = [
         ["หัวข้อ", "สถิติการกด Like"],
@@ -154,5 +157,6 @@ function save(data){
     wb.Sheets[ws5] = sheet_from_array_of_arrays(like_data);
     
 	var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
-	saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), data.filename + ".xlsx")
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), data.filename + ".xlsx")
+    
 }
