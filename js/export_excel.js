@@ -86,7 +86,6 @@ function save(data){
         ["สาเหตุการสูบบุหรี่" , data.canquit_data.reason_smoke],
         ["ระดับการติดสารนิโคตินในบุหรี่" , data.canquit_data.nicotine_level],
         ["เวลาที่กำหนดเลิกบุหรี่ครั้งล่าสุด" , data.canquit_data.date_quite],
-        ["จำนวนครั้งที่เคยกำหนดวันเลิกบุหรี่นับรวมครั้งล่าสุดด้วย" , data.canquit_data.count_smoke],
         ["เลิกสูบบุหรี่ได้"  , data.canquit_data.many_quit ],
         ["มีเงินเก็บเพิ่มขึ้น" , data.canquit_data.money ],
         ["มีชีวิตยืนยาวขึ้น" , data.canquit_data.lifelong],

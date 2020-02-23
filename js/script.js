@@ -67,32 +67,32 @@ var data_for_export = {
     filename: "", 
 
     userinfo_data: {
-        date: "",
-        name: "",
-        quit_for: "",
-        gender: "",
-        age: "",
-        has_personal_disease: "",
-        personal_disease:"",
-        age_start_smoke:"",
-        count_smoke: "",
-        time_smoke: "",
-        want_smoke: ""
+        date: "-",
+        name: "-",
+        quit_for: "-",
+        gender: "-",
+        age: "-",
+        has_personal_disease: "-",
+        personal_disease:"-",
+        age_start_smoke:"-",
+        count_smoke: "-",
+        time_smoke: "-",
+        want_smoke: "-"
     },
 
     canquit_data: { 
-        all_smoke: "",
-        money_on_smoke: "",
-        life_decrease: "",
-        reason_smoke: "",
-        nicotine_level: "",
-        date_quite: "",
-        count_smoke: "",
-        many_quit : "",
-        money: "",
-        lifelong: "",
-        reward: "",
-        reward_price: ""
+        all_smoke: "-",
+        money_on_smoke: "-",
+        life_decrease: "-",
+        reason_smoke: "-",
+        nicotine_level: "-",
+        date_quite: "-",
+        count_smoke: "-",
+        many_quit : "-",
+        money: "-",
+        lifelong: "-",
+        reward: "-",
+        reward_price: "-"
     },
 
     // oursuccess_data: {
@@ -320,6 +320,7 @@ function showDateDetail (data) {
 
     // setDataToexport 
     setDataToExport("userinfo_data","date", timestampToDate(data.startquitsmoke));
+    setDataToExport("canquit_data","date_quite", timestampToDate(data.endquitsmoke));
     setDataToExport("userinfo_data","want_smoke", data.demandquit.toString());
 
 }
@@ -1038,7 +1039,7 @@ var render = {
         var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
         var myMoney;
 
-        var reward_text = "-";
+        var reward_text = "--";
         var reward_price_text = "-";
 
         if( data.startquitsmoke === 0 ) { 
@@ -1221,32 +1222,32 @@ function clearArray() {
         filename: "", 
     
         userinfo_data: {
-            date: "",
-            name: "",
-            quit_for: "",
-            gender: "",
-            age: "",
-            has_personal_disease: "",
-            personal_disease:"",
-            age_start_smoke:"",
-            count_smoke: "",
-            time_smoke: "",
-            want_smoke: ""
+            date: "-",
+            name: "-",
+            quit_for: "-",
+            gender: "-",
+            age: "-",
+            has_personal_disease: "-",
+            personal_disease:"-",
+            age_start_smoke:"-",
+            count_smoke: "-",
+            time_smoke: "-",
+            want_smoke: "-"
         },
     
         canquit_data: { 
-            all_smoke: "",
-            money_on_smoke: "",
-            life_decrease: "",
-            reason_smoke: "",
-            nicotine_level: "",
-            date_quite: "",
-            count_smoke: "",
-            many_quit : "",
-            money: "",
-            lifelong: "",
-            reward: "",
-            reward_price: ""
+            all_smoke: "-",
+            money_on_smoke: "-",
+            life_decrease: "-",
+            reason_smoke: "-",
+            nicotine_level: "-",
+            date_quite: "-",
+            count_smoke: "-",
+            many_quit : "-",
+            money: "-",
+            lifelong: "-",
+            reward: "-",
+            reward_price: "-"
         },
     
         oursuccess_data: [],
