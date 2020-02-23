@@ -836,7 +836,7 @@ var render = {
 
         var stringDisease = '';
         var has_personal_disease_string = "ไม่มี";
-        var personal_disease_string = "";
+        var personal_disease_string = "-";
 
         if(data.disease === 1) { 
 
