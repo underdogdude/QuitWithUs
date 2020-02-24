@@ -90,7 +90,7 @@ function save(data){
         ["มีเงินเก็บเพิ่มขึ้น" , data.canquit_data.money ],
         ["มีชีวิตยืนยาวขึ้น" , data.canquit_data.lifelong],
         ["รายการรางวัลในการเก็บเงิน" , data.canquit_data.reward],
-        ["มูลค่ารางวัล", data.canquit_data.reward_price + " บาท" ]
+        ["มูลค่ารางวัล", data.canquit_data.reward_price]
     ];
 
     // var oursuccess_data = [

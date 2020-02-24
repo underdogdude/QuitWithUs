@@ -1039,8 +1039,8 @@ var render = {
         var allQuitCountSmoke = ( Math.round(days) ) * data.countsmoke;
         var myMoney;
 
-        var reward_text = "--";
-        var reward_price_text = "-";
+        var reward_text = "";
+        var reward_price_text = "";
 
         if( data.startquitsmoke === 0 ) { 
             
@@ -1049,8 +1049,6 @@ var render = {
                     <span class="text__blue"> คุณยังไม่ได้กำหนดวันเลิกบุหรี่ </span>
                 </h4>
             `;
-
-            reward_price_text = "คุณยังไม่ได้กำหนดวันเลิกบุหรี่";
 
         }else { 
 
@@ -1061,8 +1059,6 @@ var render = {
                 </h1>
                 <small style="font-size: 20px;">(บาท)</small>
             `;
-
-            reward_price_text = numberWithCommas((allQuitCountSmoke * data.cost).toFixed(2));
         }
 
         get.wallet(data.username).done(function(res) { 
@@ -1083,6 +1079,7 @@ var render = {
                         `;
 
                         reward_text += res[i].namereward + ",";
+                        reward_price_text += " " + numberWithCommas(res[i].costreward) + " บาท" + ",";
                     }
                 }
                 
@@ -1111,12 +1108,14 @@ var render = {
                 $("#wallet").append(string);
 
             }else { 
+                reward_text = "-";
+                reward_price_text = "-";
 
             }
 
             // setDataToexport 
             setDataToExport("canquit_data","reward", reward_text.slice(0, -1));
-            setDataToExport("canquit_data","reward_price", reward_price_text);
+            setDataToExport("canquit_data","reward_price", reward_price_text.slice(0, -1));
         });
     },
     remove: function(elems) {
