@@ -18,13 +18,16 @@
     <!-- Page Style -->
     <link rel="stylesheet" href="./css/style.css">
 
-    <script>
-        // First Check Login 
-        var hasLogin = sessionStorage.getItem("quitWithUsLogin");
-        if (hasLogin === null) {
-            window.location.replace("./login.html");
-        }
-    </script>
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+    <script src="js/login.js"></script>
+
+
+
 </head>
 
 <body>
@@ -49,6 +52,11 @@
             <div>
                 <h4 class="mb-0">Hello,</h4>
                 <h6 class="mb-0">Admin</h6>
+            </div>
+            <div class="ml-3">
+                <button class="btn btn-light text-danger" style="border-radius: 50%;" onclick="logout()">
+                    <i class="fa fa-sign-out"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -139,5 +147,16 @@
 
 
 <script src="./js/script.js"></script>
+<script>
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            
+        } else {
+            window.location.href = "./login.html";
+        }
+    });
+
+</script>
 
 </html>
