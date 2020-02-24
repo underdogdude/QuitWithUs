@@ -13,8 +13,15 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+
+
+
 function logout() {
-    firebase
+
+
+    var r = confirm("Are you sure you want to logout?");
+    if (r == true) {
+        firebase
         .auth()
         .signOut()
         .then(function() {
@@ -24,4 +31,5 @@ function logout() {
             // An error happened.
             alert(error);
         });
+    } 
 }

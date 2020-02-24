@@ -51,7 +51,7 @@
             </div>
             <div>
                 <h4 class="mb-0">Hello,</h4>
-                <h6 class="mb-0">Admin</h6>
+                <h6 class="mb-0" id="userAdmin"></h6>
             </div>
             <div class="ml-3">
                 <button class="btn btn-light text-danger" style="border-radius: 50%;" onclick="logout()">
@@ -151,7 +151,7 @@
 
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            
+            $("#userAdmin").html(user.email);
         } else {
             window.location.href = "./login.html";
         }
