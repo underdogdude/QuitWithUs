@@ -250,12 +250,16 @@ footer{
 }
 
 .btn__export { 
-    border-radius: 30px;
+    border-radius: 4px;
     box-shadow: 1px 1px 10px rgba(0,0,0,0.09);
-    color: #03723a;
-    background: #fff;
+    color: #207d6c;
+    background: #9bd8ab;
     margin-left: 1em;
     transition: all .3s ease;
+    letter-spacing: 1px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: 700;
 }
 
 .btn__export:hover { 

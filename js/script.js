@@ -534,7 +534,7 @@ var render = {
                     Last Modified : ${ timestampToDate(data.timestamp) } 
                 </i>
                 <button class="btn btn-link btn__export" data-toggle="tooltip" data-placement="bottom" title="Export as Excel" onclick="exportExcel()">
-                    <i class="far fa-file-excel"></i>
+                    EXPORT <i class="far fa-file-excel"></i>
                 </button>
             </small>
         `)
