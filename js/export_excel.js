@@ -122,16 +122,7 @@ function save(data){
     // ];
     var ourpill_data = data.ourpill_data;
 
-    var like_data = [
-        ["หัวข้อ", "สถิติการกด Like"],
-        ["บทความต่างๆ หน้าเราแนะนำ", data.like_data.m_suggest],
-        ["บทความต่างๆ หน้าให้เราช่วย", data.like_data.m_help],
-        ["คำตอบต่างๆ หน้าพูดคุยกับเรา", data.like_data.a_talk],
-        ["ข้อความจูงใจให้เลิกบุหรี่", data.like_data.m_persuade],
-        ["ข้อความให้กำลังใจในการเลิกบุหรี่", data.like_data.c_quit],
-        ["ข้อความให้กำลังใจเมื่ออยากสูบบุหรี่", data.like_data.c_want],
-        ["ข้อความเสริมกำลังใจเมื่อเผลอสูบบุหรี่", data.like_data.c_smoke],
-    ]
+    var like_data = data.like_data;
 
 	var wb = new Workbook(); 
 	var ws1 = "ข้อมูลผู้ใช้งาน";

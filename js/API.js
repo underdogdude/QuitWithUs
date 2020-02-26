@@ -38,5 +38,13 @@ var get = {
                 method: "GET"
             })
         )
+    },
+    information: function(param) { 
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/informations" ,
+                method: "GET"
+            })
+        )
     }
 };

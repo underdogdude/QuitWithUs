@@ -59,10 +59,6 @@ var colorSet = [ "FFEBEE", "FFCDD2", "EF9A9A", "E57373", "EF5350", "F44336", "E5
 "ECEFF1", "CFD8DC", "B0BBC5", "90A4AE", "78909C", "607D8B", "546E7A",        //blue grey
 "455A64", "37474F", "263238"]
 
-
-
-
-
 var data_for_export = {
     filename: "", 
 
@@ -95,31 +91,11 @@ var data_for_export = {
         reward_price: "-"
     },
 
-    // oursuccess_data: {
-    //     date_memo: "",
-    //     want_smoke_level:"",
-    //     emotion: "",
-    //     smoking: "",
-    //     oursuccess_data: "",
-    //     smoke_count: "",
-    //     smoke_activity: "",
-    //     smoke_with: "",
-    //     message: "",
-    //     date_in_graph: ""
-    // },
     oursuccess_data: [],
 
     ourpill_data : [],
 
-    like_data: { 
-        m_suggest: "",
-        m_help: "",
-        a_talk:"",
-        m_persuade: "",
-        c_quit: "",
-        c_want: "",
-        c_smoke: ""
-    }
+    like_data: []
 }
 
 
@@ -666,7 +642,7 @@ var render = {
 
     },
     analyzeSection: function(data) {
-
+        console.log(data);
         render.remove("#analyze");
 
         var nowTimestamp = Math.floor(Date.now() / 1000);
@@ -956,6 +932,7 @@ var render = {
                 data_for_export.ourpill_data.push(["เริ่มใช้ยา", '-']);
                 data_for_export.ourpill_data.push(["ถึงวันที่", '-']);
             }
+            console.log(data_for_export);
         });
     },
     diarySection: function (data)  {
@@ -1167,6 +1144,86 @@ function init() {
 
         $(elems).html(string);
     });
+
+    // Get INformation to Excel
+    get.information().done(function(res) { 
+
+        var A1 = 0,A2 = 0,A3 = 0,A4 = 0,A5 = 0;  
+        var B1 = 0,B2 = 0,B3 = 0;  
+        var C1 = 0,C2 = 0,C3 = 0;  
+        var D1 = 0,D2 = 0,D3 = 0,D4 = 0;  
+        var E1 = 0,E2 = 0,E3 = 0,E4 = 0,E5 = 0,E6 = 0,E7 = 0,E8 = 0,E9 = 0,E10 = 0;  
+        
+        Object.keys(res).map(function(a,b){
+            
+            A1+= res[a].A1;
+            A2+= res[a].A2;
+            A3+= res[a].A3;
+            A4+= res[a].A4;
+            A5+= res[a].A5;
+
+            B1+= res[a].B1;
+            B2+= res[a].B2;
+            B3+= res[a].B3;
+
+            C1+= res[a].C1;
+            C2+= res[a].C2;
+            C3+= res[a].C3;
+
+            D1+= res[a].D1;
+            D2+= res[a].D2;
+            D3+= res[a].D3;
+            D4+= res[a].D4;
+
+            E1+= res[a].E1;
+            E2+= res[a].E2;
+            E3+= res[a].E3;
+            E4+= res[a].E4;
+            E5+= res[a].E5;
+            E6+= res[a].E6;
+            E7+= res[a].E7;
+            E8+= res[a].E8;
+            E9+= res[a].E9;
+            E10+= res[a].E10;
+          
+        });
+
+        data_for_export.like_data.unshift( 
+            ["หัวข้อ", "ข้อความ", "สถิติการกด Like"],
+            ["บทความต่างๆ หน้าเราแนะนำ", "", ""],
+            ["สูบบุหรี่ไปแล้วได้อะไร", "สารพิษในควันบุหรี่", A1],
+            ["", "การได้รับสารพิษจากควันบุหรี่", A2],
+            ["", "โรคที่เกิดจากการสูบบุหรี่", A3],
+            ["", "กฎหมายเกี่ยวกับบุหรี่", A4],
+            ["", "บุหรี่ไฟฟ้า", A5],
+        
+            ["เลิกบุหรี่แล้วดีอย่างไร", "ด้านสุขภาพกาย", B1],
+            [" ", "ด้านสุขภาพใจ", B2],
+            [" ", "ด้านเศรษฐกิจ และสังคม", B3],
+        
+            ["เลิกบุหรี่ทำได้ไม่ยาก","การวางแผนก่อนเลิกบุหรี่", C1],
+            [" ", "1 วันก่อนเลิกบุหรี่", C2],
+            [" ", "วันที่เลิกบุหรี่", C3],
+
+            ["เทคนิคการเลิกบุหรี่", "อาการที่อาจเกิดขึ้นหลังเลิกบุหรี่", D1],
+
+            [" ", "เครียด หงุดหงิด", E1],
+            [" ", "รู้สึกเหงา เบื่อ เศร้า", E2],
+            [" ","ปวดศีรษะ เวียนศีรษะ เพลีย อ่อนแรง ซึม ง่วงนอน", E3],
+            [" ", "หิวบ่อย น้ำหนักเพิ่มขึ้น", E4],
+            [" ", "ท้องผูก", E5],
+            [" ", "นอนไม่หลับ", E6],
+            [" ", "เป็นไข้ครั่นเนื้อครั่นตัว", E7],
+            [" ", "รู้สึกชาปลายนิ้ว", E8],
+            [" ", "เป็นแผลในปาก", E9],
+            [" ", "ไอเพิ่มขึ้น", E10],
+
+            [" ", "ตัวกระตุ้นความอยากบุหรี่", D2],
+            [" ", "รับมือกับความอยากบุหรี่", D3],
+            [" ", "ไม่ท้าทายบุหรี่", D4],
+            [""]
+        );
+    })
 }
 
 function randomColor() { 
@@ -1210,57 +1267,45 @@ function getUserDetail(username) {
     });
 }
 
-
 function setDataToExport(sheet = '', data = '', value = '') { 
     data_for_export[sheet][data] = value;
 }
 
 
 function clearArray() { 
-    data_for_export = {
-        filename: "", 
-    
-        userinfo_data: {
-            date: "-",
-            name: "-",
-            quit_for: "-",
-            gender: "-",
-            age: "-",
-            has_personal_disease: "-",
-            personal_disease:"-",
-            age_start_smoke:"-",
-            count_smoke: "-",
-            time_smoke: "-",
-            want_smoke: "-"
-        },
-    
-        canquit_data: { 
-            all_smoke: "-",
-            money_on_smoke: "-",
-            life_decrease: "-",
-            reason_smoke: "-",
-            nicotine_level: "-",
-            date_quite: "-",
-            count_smoke: "-",
-            many_quit : "-",
-            money: "-",
-            lifelong: "-",
-            reward: "-",
-            reward_price: "-"
-        },
-    
-        oursuccess_data: [],
-    
-        ourpill_data : [],
-    
-        like_data: { 
-            m_suggest: "",
-            m_help: "",
-            a_talk:"",
-            m_persuade: "",
-            c_quit: "",
-            c_want: "",
-            c_smoke: ""
-        }
+    data_for_export.filename = "";
+
+    data_for_export.userinfo_data = {
+        date: "-",
+        name: "-",
+        quit_for: "-",
+        gender: "-",
+        age: "-",
+        has_personal_disease: "-",
+        personal_disease:"-",
+        age_start_smoke:"-",
+        count_smoke: "-",
+        time_smoke: "-",
+        want_smoke: "-"
+    };
+
+    data_for_export.canquit_data = { 
+        all_smoke: "-",
+        money_on_smoke: "-",
+        life_decrease: "-",
+        reason_smoke: "-",
+        nicotine_level: "-",
+        date_quite: "-",
+        count_smoke: "-",
+        many_quit : "-",
+        money: "-",
+        lifelong: "-",
+        reward: "-",
+        reward_price: "-"
     }
+
+    data_for_export.oursuccess_data = [];
+
+    data_for_export.ourpill_data = [];
+
 }
