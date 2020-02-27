@@ -35,12 +35,25 @@ function sheet_from_array_of_arrays(data, opts) {
 						horizontal: "center"
 					},
 				}
-			}
+			}else { 
+                cell.s={
+					alignment: {
+						wrapText: true,
+					}
+                }
+            }
 			
 			ws[cell_ref] = cell;
 		}
 	}
-	if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+    if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+    var wscols = [
+        {wch:30},
+        {wch:60},
+        {wch:20},
+    ];
+    
+    ws['!cols'] = wscols;
 	return ws;
 }
  

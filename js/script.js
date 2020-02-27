@@ -1102,6 +1102,158 @@ var render = {
 }
 
 
+function compare( a, b ) {
+    if ( a.type < b.type ){
+      return -1;
+    }
+    if ( a.type > b.type ){
+      return 1;
+    }
+    return 0;
+}
+
+function addFavDataToexcel () { 
+    get.favData().done(function(res) {
+
+        var sosAll = res.filter(function(item) { 
+            return item.type === 'sos';
+        });
+        var cheerupAll = res.filter(function(item) { 
+            return item.type === 'banner';
+        });
+        var commentAll = res.filter(function(item) { 
+            return item.type === 'comment';
+        });
+        var topicAll = res.filter(function(item) { 
+            return item.type === 'topic';
+        });
+
+        var sosAllCount = countDuplicateObject(sosAll, 'targetid');
+        var cheerupAllCount = countDuplicateObject(cheerupAll, 'targetid');
+        var commentAllCount = countDuplicateObject(commentAll, 'targetid');
+        var topicAllCount = countDuplicateObject(topicAll, 'targetid');
+        // console.log(sosAllCount);
+
+        $.when(
+            get.sosArticle(), 
+            get.cheerup(),
+            get.comment(), 
+            get.topic()
+
+        ).done(function(sos1, cheer2, comment3, topic4){
+            
+            var sosAfterAddCount = insertCountInObject(sosAllCount , "ID", sos1 );
+            var cheerupAfterAddCount = insertCountInObject(cheerupAllCount , "ID", cheer2 );
+            var commentAfterAddCount = insertCountInObject(commentAllCount , "ID", comment3 );
+            var topicAfterAddCount = insertCountInObject(topicAllCount , "ID", topic4 );
+            
+            data_for_export.like_data.push([""]);
+            // Below This Line is Add Value to Excel!!!!
+            data_for_export.like_data.push(["บทความต่างๆ หน้าให้เราช่วย",""]);
+            data_for_export.like_data.push(["ข้อความให้กำลังใจในการเลิกบุหรี่","(เอกสารเพิ่มเติม ตามหลัก 5D)"]);
+            for (var i = 0 ; i < sosAfterAddCount.length ; i++) { 
+                if (sosAfterAddCount[i].count === undefined) { 
+                    sosAfterAddCount[i].count = 0;
+                }
+                if(i === 0) {
+                    data_for_export.like_data.push(["ตัวกระตุ้น",sosAfterAddCount[i].title,sosAfterAddCount[i].count]);
+                }else { 
+                    data_for_export.like_data.push(["",sosAfterAddCount[i].title,sosAfterAddCount[i].count]);
+                }
+            }
+            data_for_export.like_data.push([""]);
+            data_for_export.like_data.push([""]);
+            /* 
+                THIS FOR TOPIC
+            */  
+            data_for_export.like_data.push(["คำตอบต่างๆ หน้าพูดคุยกับเรา",""]);
+            for (var i = 0 ; i < topicAfterAddCount.length ; i++) { 
+                if (topicAfterAddCount[i].count === undefined) { 
+                    topicAfterAddCount[i].count = 0;
+                }
+                if( i === 0) { 
+                    data_for_export.like_data.push(["คำถามทั้งหมด", topicAfterAddCount[i].title, topicAfterAddCount[i].count]);
+                    data_for_export.like_data.push(["", topicAfterAddCount[i].detail, ""]);
+                    data_for_export.like_data.push([""]);
+                }else { 
+                    data_for_export.like_data.push(["", topicAfterAddCount[i].title, topicAfterAddCount[i].count]);
+                    data_for_export.like_data.push(["", topicAfterAddCount[i].detail, ""]);
+                    data_for_export.like_data.push([""]);
+                }
+            }
+
+            data_for_export.like_data.push([""]);
+            /* 
+                THIS FOR Comment
+            */  
+            for (var i = 0 ; i < commentAfterAddCount.length ; i++) { 
+                if (commentAfterAddCount[i].count === undefined) { 
+                    commentAfterAddCount[i].count = 0;
+                }
+                if( i === 0) { 
+                    data_for_export.like_data.push(["คำตอบ", commentAfterAddCount[i].detail, commentAfterAddCount[i].count]);
+                }else { 
+                    data_for_export.like_data.push(["", commentAfterAddCount[i].detail, commentAfterAddCount[i].count]);
+                }
+            }
+            data_for_export.like_data.push([""]);
+            data_for_export.like_data.push([""]);
+            /* 
+                THIS FOR Banner
+            */ 
+            // Sort Type
+            cheerupAfterAddCount = cheerupAfterAddCount.sort( compare );
+
+            var once1 = 0, once2 = 0, once3 = 0;
+            for (var i = 0 ; i < cheerupAfterAddCount.length ; i++) { 
+                if (cheerupAfterAddCount[i].count === undefined) { 
+                    cheerupAfterAddCount[i].count = 0;
+                }
+                if(cheerupAfterAddCount[i].type === 0 && i === 0) {
+
+                    data_for_export.like_data.push(
+                        ["ข้อความจูงใจให้เลิกบุหรี่",cheerupAfterAddCount[i].detail,cheerupAfterAddCount[i].count]
+                    );
+
+                }
+                else if (cheerupAfterAddCount[i].type === 1 && once1 === 0) {
+
+                    data_for_export.like_data.push([""]);
+                    data_for_export.like_data.push(
+                        ["ข้อความให้กำลังใจในการเลิกบุหรี่",cheerupAfterAddCount[i].detail,cheerupAfterAddCount[i].count]
+                    );
+                    once1 = 1;
+                }
+                else if (cheerupAfterAddCount[i].type === 2 && once2 === 0) { 
+
+                    data_for_export.like_data.push([""]);
+                    data_for_export.like_data.push(
+                        ["ข้อความให้กำลังใจเมื่ออยากสูบบุหรี่",cheerupAfterAddCount[i].detail,cheerupAfterAddCount[i].count]
+                    );
+                    once2 = 1;
+                }
+                else if (cheerupAfterAddCount[i].type === 3 && once3 === 0) { 
+
+                    data_for_export.like_data.push([""]);
+                    data_for_export.like_data.push(
+                        ["ข้อความเสริมกำลังใจเมื่อเผลอสูบบุหรี่",cheerupAfterAddCount[i].detail,cheerupAfterAddCount[i].count]
+                    );
+                    once3 = 1;
+                }
+                else { 
+
+                    data_for_export.like_data.push(
+                        ["",cheerupAfterAddCount[i].detail,cheerupAfterAddCount[i].count]
+                    );
+                }
+            }
+
+        });
+    })
+}
+
+
+
 function init() {
 
     get.user().done(function(res) { 
@@ -1223,7 +1375,49 @@ function init() {
             [" ", "ไม่ท้าทายบุหรี่", D4],
             [""]
         );
-    })
+        addFavDataToexcel();
+    });
+}
+
+function insertCountInObject (arr , id , table )  {
+    
+    var obj;
+    for(var i in arr) {
+
+        var keys = Object.keys(arr[i]);
+            
+        obj = table[0].map(function(item) {
+
+            if(Number(item[id]) === Number(keys[0])) {
+                item.count = arr[i][keys];
+            }
+            return item
+        });
+    }
+    return obj;
+}
+
+function countDuplicateObject(arr, countBy) { 
+
+    // ES6 Version
+    // let result = Object.values(arr.reduce(function(c, v) {
+    //     c[v[countBy]] = c[v[countBy]] || [v[countBy], 0];
+    //     c[v[countBy]][1]++;
+    //     return c;
+    //   },{})).map(o=>({[o[0]] : o[1]}));
+
+    // ES5 Version in case of user use a IE
+    function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+    var result = Object.values(arr.reduce(function (c, v) {
+        c[v[countBy]] = c[v[countBy]] || [v[countBy], 0];
+        c[v[countBy]][1]++;
+        return c;
+    }, {})).map(function (o) {
+        return _defineProperty({}, o[0], o[1]);
+    });
+
+    return result ;
 }
 
 function randomColor() { 
@@ -1239,10 +1433,6 @@ function scrollToTop () {
 }
 
 init();
-
-
-
-
 
 function getUserDetail(username) { 
 

@@ -46,5 +46,45 @@ var get = {
                 method: "GET"
             })
         )
+    },
+    sosArticle: function () {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/sosarticles" ,
+                method: "GET"
+            })
+        )
+    },
+    topic: function () {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/topics" ,
+                method: "GET"
+            })
+        )
+    },
+    comment: function () {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/comments" ,
+                method: "GET"
+            })
+        )
+    },
+    cheerup: function () {
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/cheerups" ,
+                method: "GET"
+            })
+        )
+    },
+    favData: function(param) { 
+        return (
+            $.ajax({
+                url: "https://quitsmoking-app.herokuapp.com/favdatas" ,
+                method: "GET"
+            })
+        )
     }
 };
