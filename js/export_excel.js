@@ -159,7 +159,22 @@ function save(data){
     wb.Sheets[ws4] = sheet_from_array_of_arrays(ourpill_data);
     wb.Sheets[ws5] = sheet_from_array_of_arrays(like_data);
     
-	var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
-    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), data.filename + ".xlsx")
+    var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+    
+    // Get current date
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var hour = today.getHours();
+        hour = ("0" + hour).slice(-2);
+    var minute = today.getMinutes();
+        minute = ("0" + minute).slice(-2);
+        
+
+        today = dd + mm + yyyy;
+        time = hour + minute;
+    
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), data.filename + "_" + today + "_" + time + ".xlsx")
     
 }
