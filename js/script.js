@@ -372,6 +372,16 @@ function calculateNicotine(level) {
     }
 }
 
+function calculateDiffTime ( timestampDate ) {
+
+    var date1 = timestampDate * 1000;
+    var now = Date.now();
+    var diffTime = Math.abs(now - date1);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+    return diffDays
+}
+
 function isSmokeDetail(data) { 
 
     var string = '';
@@ -979,7 +989,7 @@ var render = {
                     }else { 
                         text_we_achieve = res[i].additional ;
                     }
-                    
+                    // console.log(data, 'fucl');
                     data_for_export.oursuccess_data.push(["วันที่บันทึก", generateDateForExcel(res[i].date)]);
                     data_for_export.oursuccess_data.push(["ความอยากบุหรี่(1-10)", res[i].thirst]);
                     data_for_export.oursuccess_data.push(["ความรู้สึก", res[i].emotion]);
@@ -989,7 +999,7 @@ var render = {
                     data_for_export.oursuccess_data.push(["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", res[i].people]);
                     data_for_export.oursuccess_data.push(["ข้อความความสำเร็จของเรา", text_we_achieve]);
                     data_for_export.oursuccess_data.push(["ข้อความเราเรียนรู้", text_we_learn]);
-                    data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา", res.length.toString() ]);
+                    data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา (ที่เป็นบันไดงู)", calculateDiffTime(data.endquitsmoke) + " วัน" ]);
                     data_for_export.oursuccess_data.push([""]);
     
                 }
@@ -1005,7 +1015,7 @@ var render = {
                 data_for_export.oursuccess_data.push(["(ถ้าสูบ)บุคคลที่อยู่ด้วยขณะสูบบุหรี่", '-']);
                 data_for_export.oursuccess_data.push(["ข้อความความสำเร็จของเรา", '-']);
                 data_for_export.oursuccess_data.push(["ข้อความเราเรียนรู้", '-']);
-                data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา", '-']);
+                data_for_export.oursuccess_data.push(["จำนวนวันในกราฟความสำเร็จของเรา (ที่เป็นบันไดงู)", '-']);
             }
         });
     },
