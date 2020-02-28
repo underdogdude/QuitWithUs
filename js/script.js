@@ -936,9 +936,9 @@ var render = {
         });
     },
     diarySection: function (data)  {
-
+      
         get.diary(data.username).done(function(res) { 
-            
+            var res = res.reverse();
             render.remove("#diary");
 
             data_for_export.oursuccess_data.push(["หัวข้อ"]);
