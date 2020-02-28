@@ -39,24 +39,16 @@
                 <span class="brand-text">เราเลิกได้</span>
                 <span class="brand-subtext">| Quit with us</span>
             </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse text-center" id="navbarNavAltMarkup">
-                <div class="navbar-nav pl-5">
-                    <!-- <a class="nav-item nav-link active" href="#">Dashboard <span class="sr-only">(current)</span></a> -->
+            <div class="d-flex">
+                <div class="text-right d-flex justify-content-center flex-column">
+                    <h4 class="mb-0 text__hello">Hello,</h4>
+                    <h6 class="mb-0 text__admin" id="userAdmin"></h6>
                 </div>
-            </div>
-            <div>
-                <h4 class="mb-0">Hello,</h4>
-                <h6 class="mb-0" id="userAdmin"></h6>
-            </div>
-            <div class="ml-3">
-                <button class="btn btn-light text-danger" style="border-radius: 50%;" onclick="logout()">
-                    <i class="fa fa-sign-out"></i>
-                </button>
+                <div class="ml-3 d-flex align-items-center" >
+                    <button class="btn btn-light text-danger" style="border-radius: 50%;" onclick="logout()">
+                        <i class="fa fa-sign-out"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>

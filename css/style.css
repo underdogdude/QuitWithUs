@@ -117,6 +117,7 @@ body {
     border: 0;
     box-shadow: 1px 5px 10px rgba(0,0,0,0.09);
     padding: 20px;
+    word-break: break-word;
 }
 
 .detail__main .card { 
@@ -446,4 +447,13 @@ footer{
     left: 0;
     font-size: 30px;
     color: #d3f4fb;
+}
+
+@media only screen and (max-width: 768px) {
+    .text__hello {
+        font-size: 12px;
+    }   
+    .text__admin {
+        font-size: 10px;
+    }
 }
